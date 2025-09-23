@@ -30,10 +30,7 @@ public interface PostgreSQL {
   public static Connection connect() throws SQLException {
     final Connection connection = DriverManager.getConnection(
         ConnData.uri, ConnData.user, ConnData.passw);
-    if (connection != null) 
-      System.out.println(connection);
-    else 
-      System.out.println("Connection failed");
+    System.out.println(connection);
     return connection;
   }
 
@@ -50,22 +47,21 @@ public interface PostgreSQL {
   //@param String sql -> SQL query to execute
   //@param Connection conn -> Connection to execute the query on
   //returns nothing
-  public static void iterateOverRows (String sql, Connection conn) throws SQLException {
+  public static void iterateOverBooks (Connection conn) throws SQLException {
     Statement statement = conn.createStatement();
     ResultSet queryOutput = statement.executeQuery("SELECT * FROM books");
     ResultSetMetaData metadata = queryOutput.getMetaData();
-    int numberOfColumns = metadata.getColumnCount();
-    // TODO: check if formatting by pulling specific values from a set is possible
-    // Set<Integer> gaps = Set.of(60, 30, 4, 30);
     System.out.println("-------------------");
-    for (int i = 1; i <= numberOfColumns; i++) {
-      System.out.format("| %s |", metadata.getColumnName(i));
-    }
+    System.out.format("| %-60s |", metadata.getColumnName(1));
+    System.out.format("| %-30s |", metadata.getColumnName(2));
+    System.out.format("| %-4s |", metadata.getColumnName(3));
+    System.out.format("| %-30s |", metadata.getColumnName(4));
     System.out.println("\n-------------------");
     while (queryOutput.next()) {
-      for (int i = 1; i <= numberOfColumns; i++) {
-        System.out.format("| %s |", queryOutput.getString(i));
-      }
+      System.out.format("| %-60.60s |", queryOutput.getString("title"));
+      System.out.format("| %-30.30s |", queryOutput.getString("author"));
+      System.out.format("| %-4.4s |", queryOutput.getString("pub_date"));
+      System.out.format("| %-11.11s |", queryOutput.getString("isbn"));
       System.out.print("\n");
     }
   }
@@ -157,7 +153,7 @@ public interface PostgreSQL {
         String userID = allMembers.getString("id");
         String userPhoneNumber = allMembers.getString("phone_no");
         String userEmail = allMembers.getString("email");
-        Member newMember = new Member(userName, userSurname, userID, userEmail, userPhoneNumber);
+        Member newMember = new Member(userName, userSurname, userID, userEmail, userPhoneNumber, conn);
         extractedMembers.add(newMember);
       }
     } catch (SQLException e) {
@@ -168,5 +164,25 @@ public interface PostgreSQL {
       System.out.println(iteratedMember.getName());
     }
     return extractedMembers; 
+  }
+  public static void iterateOverMembers (Connection conn) throws SQLException {
+    Statement statement = conn.createStatement();
+    ResultSet queryOutput = statement.executeQuery("SELECT * FROM members");
+    ResultSetMetaData metadata = queryOutput.getMetaData();
+    System.out.println("-------------------");
+    System.out.format("| %-20.20s |", metadata.getColumnName(1));
+    System.out.format("| %-20.20s |", metadata.getColumnName(2));
+    System.out.format("| %-10.10s |", metadata.getColumnName(3));
+    System.out.format("| %-30.30s |", metadata.getColumnName(4));
+    System.out.format("| %-30.30s |", metadata.getColumnName(4));
+    System.out.println("\n-------------------");
+    while (queryOutput.next()) {
+      System.out.format("| %-20.20s |", queryOutput.getString(1));
+      System.out.format("| %-20.20s |", queryOutput.getString(2));
+      System.out.format("| %-10.10s |", queryOutput.getString(3));
+      System.out.format("| %-30.30s |", queryOutput.getString(4));
+      System.out.format("| %-30.30s |", queryOutput.getString(5));
+      System.out.print("\n");
+    }
   }
 }

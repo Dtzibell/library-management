@@ -50,7 +50,7 @@ public class Member {
   String userName, userSurname, userID, userPhoneNumber;
 
   public Member (String userName, String userSurname, 
-      String userID, String userPhoneNumber, String userEmail) {
+      String userID, String userPhoneNumber, String userEmail, Connection conn) {
     try {
       this.userEmail = new Email(userEmail);
       System.out.println(this.userEmail.email);
