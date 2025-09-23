@@ -1,25 +1,26 @@
 package com.dtzi.app.classes;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Book {
-  final int ISBN, publicationYear;
-  final String title, author, genre;
+  int publicationYear;
+  String title, author, ISBN;
   boolean availability;
-  final LocalDate dateAdded;
-  
-  public Book (int ISBN, int publicationYear, String title, String author, String genre,
-      boolean availability, LocalDate dateAdded) {
-  this.ISBN = ISBN;
-  this.publicationYear = publicationYear;
-  this.title = title;
-  this.author = author;
-  this.genre = genre;
-  this.availability = availability;
-  this.dateAdded = dateAdded;
+
+  public Book(String title, String author, int publicationYear, String ISBN) {
+    this.title = title;
+    this.author = author;
+    this.publicationYear = publicationYear;
+    this.ISBN = ISBN;
   }
-  
-  public int getISBN() {
+
+  public String getISBN() {
     return this.ISBN;
   }
 
@@ -35,19 +36,27 @@ public class Book {
     return this.author;
   }
 
-  public String getGenre() {
-    return this.genre;
-  }
-
   public boolean getAvail() {
     return this.availability;
   }
 
-  public LocalDate getDateAdded() {
-    return this.dateAdded;
-  }
-
   public void setAvail(boolean newAvail) {
     this.availability = newAvail;
+  }
+
+  public void setISBN(String newISBN) {
+    this.ISBN = newISBN;
+  }
+
+  public void setPubYear(int newPubYear) {
+    this.publicationYear = newPubYear;
+  }
+
+  public void setTitle(String newTitle) {
+    this.title = newTitle;
+  }
+
+  public void setAuthor(String newAuthor) {
+    this.title = newAuthor;
   }
 }
