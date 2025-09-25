@@ -1,4 +1,4 @@
-package com.dtzi.app;
+package com.dtzi.app.pgutils;
 
 import com.dtzi.app.classes.Book;
 import com.dtzi.app.classes.Member;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public interface PostgreSQL {
   public interface ConnData {
-    static String uri = "jdbc:postgresql://localhost:5432/postgres";
+    static String uri = "jdbc:postgresql://192.168.2.229:5432/postgres";
     static String user = "postgres";
     static String passw = "grespost";
   }
