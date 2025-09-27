@@ -1,5 +1,6 @@
-/home/dtzi/library-management/src/main/java/com/dtzi/app/App.java
-/home/dtzi/library-management/src/main/java/com/dtzi/app/classes/Book.java
-/home/dtzi/library-management/src/main/java/com/dtzi/app/classes/Member.java
-/home/dtzi/library-management/src/main/java/com/dtzi/app/helpers/Population.java
-/home/dtzi/library-management/src/main/java/com/dtzi/app/pgutils/PostgreSQL.java
+/home/tauras/library-management-system/src/main/java/com/dtzi/app/App.java
+/home/tauras/library-management-system/src/main/java/com/dtzi/app/FXMLController.java
+/home/tauras/library-management-system/src/main/java/com/dtzi/app/classes/Book.java
+/home/tauras/library-management-system/src/main/java/com/dtzi/app/classes/Member.java
+/home/tauras/library-management-system/src/main/java/com/dtzi/app/helpers/Population.java
+/home/tauras/library-management-system/src/main/java/com/dtzi/app/pgutils/PostgreSQL.java
