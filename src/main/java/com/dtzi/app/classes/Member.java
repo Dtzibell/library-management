@@ -56,33 +56,33 @@ public class Member {
   Email userEmail;
   SimpleStringProperty userName, userSurname, userID, userPhoneNumber;
 
-  public Member (String userName, String userSurname, 
-      String userID, String userPhoneNumber, String userEmail, Connection conn) {
-    try {
-      this.userEmail = new Email(userEmail);
-      System.out.println(this.userEmail.email);
-    } catch (EmailVerificationException e) {
-      this.userEmail = null;
-    }
-    this.userName = new SimpleStringProperty(userName);
-    this.userSurname = new SimpleStringProperty(userSurname);
-    this.userID = new SimpleStringProperty(userID);
-    this.userPhoneNumber = new SimpleStringProperty(userPhoneNumber );
-    try {
-      Statement statement = conn.createStatement();
-    } catch (SQLException e) {
-      System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
-    }
-    StringBuilder sb = new StringBuilder("INSERT INTO members (name, surname, id, phone_no, email) VALUES (");
-    sb.append(this.userName.get() + ", ");
-    sb.append(this.userSurname.get() + ", ");
-    sb.append(this.userID.get() + ", ");
-    sb.append(this.userPhoneNumber.get() + ", ");
-    sb.append(this.userEmail.email.get() + ")");
-    String sqlQuery = sb.toString();
-    System.out.print(sb);
+  // public Member (String userName, String userSurname, 
+  //     String userID, String userPhoneNumber, String userEmail, Connection conn) {
+  //   try {
+  //     this.userEmail = new Email(userEmail);
+  //     System.out.println(this.userEmail.email);
+  //   } catch (EmailVerificationException e) {
+  //     this.userEmail = null;
+  //   }
+  //   this.userName = new SimpleStringProperty(userName);
+  //   this.userSurname = new SimpleStringProperty(userSurname);
+  //   this.userID = new SimpleStringProperty(userID);
+  //   this.userPhoneNumber = new SimpleStringProperty(userPhoneNumber );
+  //   try {
+  //     Statement statement = conn.createStatement();
+  //   } catch (SQLException e) {
+  //     System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+  //   }
+  //   StringBuilder sb = new StringBuilder("INSERT INTO members (name, surname, id, phone_no, email) VALUES (");
+  //   sb.append(this.userName.get() + ", ");
+  //   sb.append(this.userSurname.get() + ", ");
+  //   sb.append(this.userID.get() + ", ");
+  //   sb.append(this.userPhoneNumber.get() + ", ");
+  //   sb.append(this.userEmail.email.get() + ")");
+  //   String sqlQuery = sb.toString();
+  //   System.out.print(sb);
 
-  }
+  // }
 
   public Member (String userName, String userSurname, 
       String userID, String userPhoneNumber, String userEmail) {
@@ -98,20 +98,20 @@ public class Member {
     this.userPhoneNumber = new SimpleStringProperty(userPhoneNumber );
   }
 
-  public static Callback<Member, Observable[]> extractor = p -> new Observable[] {p.surnameProperty(), p.firstNameProperty()};
+  // public static Callback<Member, Observable[]> extractor = p -> new Observable[] {p.surnameProperty(), p.firstNameProperty()};
   //public function
   //returns int userID
-  public SimpleStringProperty getUserID () {
+  public SimpleStringProperty IDProperty () {
     return userID; 
   }
   //public function
   //returns int userPhoneNumber
-  public SimpleStringProperty getPhoneNumber () {
+  public SimpleStringProperty phoneNumberProperty () {
     return userPhoneNumber; 
   }
   //public function
   //returns String userEmail
-  public SimpleStringProperty getEmail () {
+  public SimpleStringProperty emailProperty () {
     return userEmail.get(); 
   }
   //public function
