@@ -58,8 +58,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-      Parent root = FXMLLoader.load(getClass().getResource("/view/screen.fxml"));
-      Scene scene = new Scene(root, 400, 400, Color.ALICEBLUE);
+      Parent root = FXMLLoader.load(getClass().getResource("/view/mainScreen.fxml"));
+      Scene scene = new Scene(root, 800, 800, Color.ALICEBLUE);
       // scene.getStylesheets().add(getClass().getResource("/style/style.css").toExternalForm());
       stage.setTitle("test");
       stage.setScene(scene);

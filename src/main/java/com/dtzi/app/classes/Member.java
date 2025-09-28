@@ -1,17 +1,14 @@
 package com.dtzi.app.classes;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import com.dtzi.app.classes.Member.Email.EmailVerificationException;
+import com.sun.javafx.binding.StringFormatter;
+
 import java.util.regex.Pattern;
 
-import com.dtzi.app.classes.Member.Email.EmailVerificationException;
-import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.util.Callback;
-import javafx.beans.value.ObservableValue;
-import javafx.beans.value.ObservableObjectValue;
-import javafx.beans.value.ObservableStringValue;
+import java.sql.SQLException;
+import java.sql.Connection;
+import java.sql.Statement;
 
 
 public class Member {
@@ -32,7 +29,7 @@ public class Member {
       boolean result = Pattern.matches(verification, input);
       this.email = new SimpleStringProperty(input);
       if (result == false) {
-        throw new EmailVerificationException("email could not be verified. Enter a valid email");
+        throw new EmailVerificationException("email " + input + " could not be verified. Enter a valid email");
       } 
     }
 
@@ -56,33 +53,34 @@ public class Member {
   Email userEmail;
   SimpleStringProperty userName, userSurname, userID, userPhoneNumber;
 
-  // public Member (String userName, String userSurname, 
-  //     String userID, String userPhoneNumber, String userEmail, Connection conn) {
-  //   try {
-  //     this.userEmail = new Email(userEmail);
-  //     System.out.println(this.userEmail.email);
-  //   } catch (EmailVerificationException e) {
-  //     this.userEmail = null;
-  //   }
-  //   this.userName = new SimpleStringProperty(userName);
-  //   this.userSurname = new SimpleStringProperty(userSurname);
-  //   this.userID = new SimpleStringProperty(userID);
-  //   this.userPhoneNumber = new SimpleStringProperty(userPhoneNumber );
-  //   try {
-  //     Statement statement = conn.createStatement();
-  //   } catch (SQLException e) {
-  //     System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
-  //   }
-  //   StringBuilder sb = new StringBuilder("INSERT INTO members (name, surname, id, phone_no, email) VALUES (");
-  //   sb.append(this.userName.get() + ", ");
-  //   sb.append(this.userSurname.get() + ", ");
-  //   sb.append(this.userID.get() + ", ");
-  //   sb.append(this.userPhoneNumber.get() + ", ");
-  //   sb.append(this.userEmail.email.get() + ")");
-  //   String sqlQuery = sb.toString();
-  //   System.out.print(sb);
+  public Member (String userName, String userSurname, 
+      String userID, String userPhoneNumber, String userEmail, Connection conn) {
+    try {
+      this.userEmail = new Email(userEmail);
+      System.out.println(this.userEmail.email);
+    } catch (EmailVerificationException e) {
+      System.out.println(e.getMessage());
+      this.userEmail = null;
+    }
+    this.userName = new SimpleStringProperty(userName);
+    this.userSurname = new SimpleStringProperty(userSurname);
+    this.userID = new SimpleStringProperty(userID);
+    this.userPhoneNumber = new SimpleStringProperty(userPhoneNumber );
+    try {
+      Statement statement = conn.createStatement();
+    } catch (SQLException e) {
+      System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+    }
+    StringBuilder sb = new StringBuilder("INSERT INTO members (name, surname, id, phone_no, email) VALUES (");
+    sb.append(this.userName.get() + ", ");
+    sb.append(this.userSurname.get() + ", ");
+    sb.append(this.userID.get() + ", ");
+    sb.append(this.userPhoneNumber.get() + ", ");
+    sb.append(this.userEmail.email.get() + ")");
+    String sqlQuery = sb.toString();
+    System.out.print(sb);
 
-  // }
+  }
 
   public Member (String userName, String userSurname, 
       String userID, String userPhoneNumber, String userEmail) {
@@ -90,6 +88,7 @@ public class Member {
       this.userEmail = new Email(userEmail);
       System.out.println(this.userEmail.email);
     } catch (EmailVerificationException e) {
+      System.out.println(e.getMessage());
       this.userEmail = null;
     }
     this.userName = new SimpleStringProperty(userName);

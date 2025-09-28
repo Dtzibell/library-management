@@ -11,7 +11,7 @@ public class FilterScene {
 
   public void start(Stage stage) throws Exception {
     Parent root = FXMLLoader.load(getClass().getResource("/view/filterScreen.fxml"));
-    Scene scene = new Scene(root, 400, 400);
+    Scene scene = new Scene(root, 200, 200);
     stage.setScene(scene);
     stage.show();
   }

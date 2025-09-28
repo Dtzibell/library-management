@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.1" name="com.dtzi.app.AppTest" time="0.032" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.1" name="com.dtzi.app.AppTest" time="0.031" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="25"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -12,7 +12,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="/home/tauras/Documents/jdk-25/jdk-25/lib"/>
-    <property name="sun.java.command" value="/home/tauras/library-management-system/target/surefire/surefirebooter-20250927113234663_3.jar /home/tauras/library-management-system/target/surefire 2025-09-27T11-32-34_587-jvmRun1 surefire-20250927113234663_1tmp surefire_0-20250927113234663_2tmp"/>
+    <property name="sun.java.command" value="/home/tauras/library-management-system/target/surefire/surefirebooter-20250928213149973_3.jar /home/tauras/library-management-system/target/surefire 2025-09-28T21-31-49_892-jvmRun1 surefire-20250928213149973_1tmp surefire_0-20250928213149973_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/tauras/library-management-system/target/test-classes:/home/tauras/library-management-system/target/classes:/home/tauras/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.11.0/junit-jupiter-api-5.11.0.jar:/home/tauras/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/home/tauras/.m2/repository/org/junit/platform/junit-platform-commons/1.11.0/junit-platform-commons-1.11.0.jar:/home/tauras/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/tauras/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.11.0/junit-jupiter-params-5.11.0.jar:/home/tauras/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.20.0-rc1/jackson-databind-2.20.0-rc1.jar:/home/tauras/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.20-rc1/jackson-annotations-2.20-rc1.jar:/home/tauras/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.20.0-rc1/jackson-core-2.20.0-rc1.jar:/home/tauras/.m2/repository/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.20.0-rc1/jackson-datatype-jsr310-2.20.0-rc1.jar:/home/tauras/.m2/repository/org/mongodb/mongodb-driver-sync/5.5.1/mongodb-driver-sync-5.5.1.jar:/home/tauras/.m2/repository/org/mongodb/bson/5.5.1/bson-5.5.1.jar:/home/tauras/.m2/repository/org/mongodb/mongodb-driver-core/5.5.1/mongodb-driver-core-5.5.1.jar:/home/tauras/.m2/repository/org/mongodb/bson-record-codec/5.5.1/bson-record-codec-5.5.1.jar:/home/tauras/.m2/repository/org/postgresql/postgresql/42.7.7/postgresql-42.7.7.jar:/home/tauras/.m2/repository/org/checkerframework/checker-qual/3.49.3/checker-qual-3.49.3.jar:/home/tauras/.m2/repository/org/openjfx/javafx-controls/25/javafx-controls-25.jar:/home/tauras/.m2/repository/org/openjfx/javafx-controls/25/javafx-controls-25-linux.jar:/home/tauras/.m2/repository/org/openjfx/javafx-graphics/25/javafx-graphics-25.jar:/home/tauras/.m2/repository/org/openjfx/javafx-graphics/25/javafx-graphics-25-linux.jar:/home/tauras/.m2/repository/org/openjfx/javafx-base/25/javafx-base-25.jar:/home/tauras/.m2/repository/org/openjfx/javafx-base/25/javafx-base-25-linux.jar:/home/tauras/.m2/repository/org/openjfx/javafx-fxml/25/javafx-fxml-25.jar:/home/tauras/.m2/repository/org/openjfx/javafx-fxml/25/javafx-fxml-25-linux.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -27,13 +27,13 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
-    <property name="surefire.real.class.path" value="/home/tauras/library-management-system/target/surefire/surefirebooter-20250927113234663_3.jar"/>
+    <property name="surefire.real.class.path" value="/home/tauras/library-management-system/target/surefire/surefirebooter-20250928213149973_3.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="25+36-3489"/>
     <property name="user.name" value="tauras"/>
     <property name="stdout.encoding" value="UTF-8"/>
     <property name="path.separator" value=":"/>
-    <property name="os.version" value="6.14.0-29-generic"/>
+    <property name="os.version" value="6.14.0-32-generic"/>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="file.encoding" value="UTF-8"/>
     <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
