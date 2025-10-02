@@ -24,7 +24,7 @@
       <TextField fx:id="IDField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
       <TextField fx:id="phoneNoField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
       <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
-      <Button text="Update" fx:id="updateButton" GridPane.columnIndex="0" GridPane.rowIndex="5" GridPane.columnSpan="2"/>
+      <Button text="Update" onAction="#resetFilter" GridPane.columnIndex="0" GridPane.rowIndex="5" GridPane.columnSpan="2"/>
     </GridPane>
   </children>
 </AnchorPane>

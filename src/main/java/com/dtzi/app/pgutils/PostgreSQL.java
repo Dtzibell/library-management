@@ -30,7 +30,6 @@ public interface PostgreSQL {
   public static Connection connect() throws SQLException {
     final Connection connection = DriverManager.getConnection(
         ConnData.uri, ConnData.user, ConnData.passw);
-    System.out.println(connection);
     return connection;
   }
 
@@ -85,10 +84,6 @@ public interface PostgreSQL {
     } catch (SQLException e) {
       System.err.println(e.getMessage());
     }
-    for (int i = 0; i < extractedBooks.size(); i++) {
-      Book iteratedBook = extractedBooks.get(i);
-      System.out.println(iteratedBook.getTitle() + " by " + iteratedBook.getAuthor());
-    }
     return extractedBooks; 
   }
   
@@ -105,7 +100,7 @@ public interface PostgreSQL {
       Statement statement = conn.createStatement();
       statement.executeQuery(sql);
     } catch (SQLException e) {
-      System.out.println("Adding a book failed");
+      System.out.println(e.getMessage());
     }
   }
 
@@ -135,7 +130,7 @@ public interface PostgreSQL {
       Statement statement = conn.createStatement();
       statement.executeQuery(sql);
     } catch (SQLException e) {
-      System.out.println("Adding a member failed");
+      System.out.println(e.getMessage());
     }
   }
 
@@ -153,16 +148,11 @@ public interface PostgreSQL {
         String userID = allMembers.getString("id");
         String userPhoneNumber = allMembers.getString("phone_no");
         String userEmail = allMembers.getString("email");
-        System.out.println(userEmail);
-        Member newMember = new Member(userName, userSurname, userID, userPhoneNumber, userEmail, conn);
+        Member newMember = new Member(userName, userSurname, userID, userPhoneNumber, userEmail);
         extractedMembers.add(newMember);
       }
     } catch (SQLException e) {
       System.err.println(e.getMessage());
-    }
-    for (int i = 0; i < extractedMembers.size(); i++) {
-      Member iteratedMember = extractedMembers.get(i);
-      System.out.println(iteratedMember.firstNameProperty().get());
     }
     return extractedMembers; 
   }

@@ -5,8 +5,9 @@ com/dtzi/app/classes/Member$Email.class
 com/dtzi/app/MainController$1.class
 com/dtzi/app/classes/Member.class
 com/dtzi/app/classes/Book.class
+com/dtzi/app/AddController.class
 com/dtzi/app/pgutils/PostgreSQL$ConnData.class
-com/dtzi/app/MainController$ListPayload.class
 com/dtzi/app/pgutils/PostgreSQL.class
+com/dtzi/app/AddScene.class
 com/dtzi/app/FilterScene.class
 com/dtzi/app/classes/Member$Email$EmailVerificationException.class

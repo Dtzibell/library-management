@@ -4,14 +4,14 @@ import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-public class FilterScene {
+public class AddScene {
 
-  public FilterScene() {
+  public AddScene() {
   }
 
   public void start(Stage stage) throws Exception {
-    Parent root = FXMLLoader.load(getClass().getResource("/view/filterScreen.fxml"));
-    Scene scene = new Scene(root, 200, 200);
+    Parent root = FXMLLoader.load(getClass().getResource("/view/addScreen.fxml"));
+    Scene scene = new Scene(root, 400, 200);
     stage.setScene(scene);
     stage.show();
   }
