@@ -2,14 +2,10 @@ package com.dtzi.app.pgutils;
 
 import com.dtzi.app.classes.Book;
 import com.dtzi.app.classes.Member;
-import com.dtzi.app.classes.Member.Email.EmailVerificationException;
-import com.dtzi.app.classes.Member.Email;
 
-import java.util.Set;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
@@ -33,37 +29,9 @@ public interface PostgreSQL {
     return connection;
   }
 
-
   // --------------------------
   // BOOKS RELATED METHODS
   // --------------------------
-  
-  //public static function
-  //
-  // executes a query and iterates over the rows of the outgoing resultset
-  // conn is the Connection that is connected to the relevant database
-  //
-  //@param String sql -> SQL query to execute
-  //@param Connection conn -> Connection to execute the query on
-  //returns nothing
-  public static void iterateOverBooks (Connection conn) throws SQLException {
-    Statement statement = conn.createStatement();
-    ResultSet queryOutput = statement.executeQuery("SELECT * FROM books");
-    ResultSetMetaData metadata = queryOutput.getMetaData();
-    System.out.println("-------------------");
-    System.out.format("| %-60s |", metadata.getColumnName(1));
-    System.out.format("| %-30s |", metadata.getColumnName(2));
-    System.out.format("| %-4s |", metadata.getColumnName(3));
-    System.out.format("| %-30s |", metadata.getColumnName(4));
-    System.out.println("\n-------------------");
-    while (queryOutput.next()) {
-      System.out.format("| %-60.60s |", queryOutput.getString("title"));
-      System.out.format("| %-30.30s |", queryOutput.getString("author"));
-      System.out.format("| %-4.4s |", queryOutput.getString("pub_date"));
-      System.out.format("| %-11.11s |", queryOutput.getString("isbn"));
-      System.out.print("\n");
-    }
-  }
   
   //public static function
   //@param String sql
@@ -87,52 +55,9 @@ public interface PostgreSQL {
     return extractedBooks; 
   }
   
-  public static void addBook (String title, String author, int publicationYear, String ISBN, 
-      Connection conn) {
-    StringBuilder sb = new StringBuilder("INSERT INTO books(title, author, pub_date, isbn) VALUES (");
-    sb.append(title + ", ");
-    sb.append(author + ", ");
-    sb.append(publicationYear);
-    sb.append(", ");
-    sb.append(ISBN);
-    String sql = sb.toString();
-    try {
-      Statement statement = conn.createStatement();
-      statement.executeQuery(sql);
-    } catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
-  }
-
   // ------------------------
   // MEMBER RELATED METHODS
   // ------------------------
-
-  //public static function
-  //@param String 
-  //returns nothing 
-  public static void addMember (String userName, String userSurname, 
-      String userID, String userEmail, String userPhoneNumber, Connection conn) {
-    StringBuilder sb = new StringBuilder("INSERT INTO members (name, surname, id, phone_no, email) VALUES (");
-    sb.append(userName + ", ");
-    sb.append(userSurname + ", ");
-    sb.append(userID + ", ");
-    try {
-      Email email = new Email(userEmail);
-      sb.append(userEmail + ", ");
-    } catch (EmailVerificationException e) {
-      userEmail = null;
-    }
-    sb.append(userEmail + ", ");
-    sb.append(userPhoneNumber);
-    String sql = sb.toString();
-    try {
-      Statement statement = conn.createStatement();
-      statement.executeQuery(sql);
-    } catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
-  }
 
   //public static function
   //@param String sql
@@ -155,25 +80,5 @@ public interface PostgreSQL {
       System.err.println(e.getMessage());
     }
     return extractedMembers; 
-  }
-  public static void iterateOverMembers (Connection conn) throws SQLException {
-    Statement statement = conn.createStatement();
-    ResultSet queryOutput = statement.executeQuery("SELECT * FROM members");
-    ResultSetMetaData metadata = queryOutput.getMetaData();
-    System.out.println("-------------------");
-    System.out.format("| %-20.20s |", metadata.getColumnName(1));
-    System.out.format("| %-20.20s |", metadata.getColumnName(2));
-    System.out.format("| %-10.10s |", metadata.getColumnName(3));
-    System.out.format("| %-30.30s |", metadata.getColumnName(4));
-    System.out.format("| %-30.30s |", metadata.getColumnName(4));
-    System.out.println("\n-------------------");
-    while (queryOutput.next()) {
-      System.out.format("| %-20.20s |", queryOutput.getString(1));
-      System.out.format("| %-20.20s |", queryOutput.getString(2));
-      System.out.format("| %-10.10s |", queryOutput.getString(3));
-      System.out.format("| %-30.30s |", queryOutput.getString(4));
-      System.out.format("| %-30.30s |", queryOutput.getString(5));
-      System.out.print("\n");
-    }
   }
 }

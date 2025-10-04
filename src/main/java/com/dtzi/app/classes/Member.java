@@ -23,7 +23,7 @@ public class Member {
     }
 
     private SimpleStringProperty email;
-    private String verification = "[\\w\\.]{10,}@mymail.[a-z]{3}";
+    private static String verification = "[\\w\\.]{10,}@mymail.[a-z]{3}";
 
     public Email (String input) throws EmailVerificationException{
       // Email validation; 10+ symbols before @mymail.xyz;
@@ -82,6 +82,19 @@ public class Member {
 
   public Member (String userName, String userSurname, 
       String userID, String userPhoneNumber, String userEmail) {
+    try {
+      this.userEmail = new Email(userEmail);
+    } catch (EmailVerificationException e) {
+      System.out.println(e.getMessage());
+      this.userEmail = null;
+    }
+    this.userName = new SimpleStringProperty(userName);
+    this.userSurname = new SimpleStringProperty(userSurname);
+    this.userID = new SimpleStringProperty(userID);
+    this.userPhoneNumber = new SimpleStringProperty(userPhoneNumber);
+  }
+  public Member (String userName, String userSurname,
+      String userPhoneNumber, String userEmail) {
     try {
       this.userEmail = new Email(userEmail);
     } catch (EmailVerificationException e) {

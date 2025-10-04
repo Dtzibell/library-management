@@ -1,35 +1,27 @@
-package com.dtzi.app;
+package com.dtzi.app.ui;
 
 import com.dtzi.app.classes.Member;
 import com.dtzi.app.pgutils.PostgreSQL;
+import com.dtzi.app.helpers.Population;
 
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Formatter;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-import java.util.List;
 import java.util.Map;
 
 import javafx.scene.control.ListView;
 import javafx.fxml.Initializable;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.fxml.FXML;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
 import javafx.stage.Stage;
-import javafx.beans.InvalidationListener;
-import javafx.scene.control.Control;
 
 public class MainController implements Initializable{
 
@@ -53,12 +45,16 @@ public class MainController implements Initializable{
   @FXML
   private Button filterButton;
 
-  public static ObservableList<Member> listOfMembers;
   public Connection conn;
 
-  // needs to exist for filter scene initialization.
+  // static
+  public static ObservableList<Member> listOfMembers;
+  public static int index;
+  
+  // misc windows init
   private FilterScene filterScene = new FilterScene();
   private AddScene addScene = new AddScene();
+  private AreYouSureScene sureScene = new AreYouSureScene();
   
   @Override
   public void initialize(URL url, ResourceBundle rb) {
@@ -85,7 +81,7 @@ public class MainController implements Initializable{
 
       // set the textfields to the selected item's properties
       personList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-        if (observable != null) {
+        if (newValue != null) {
           textName.setText(newValue.firstNameProperty().get());
           textSurname.setText(newValue.surnameProperty().get());
           textID.setText(newValue.IDProperty().get());
@@ -105,12 +101,24 @@ public class MainController implements Initializable{
     filterScene.start(stage);
   }
 
-  public void add() throws Exception {
+  @FXML
+  private void add() throws Exception {
     Stage stage = new Stage();
     addScene.start(stage);
   }
 
-  public void update() throws Exception {
+  @FXML
+  private void remove() throws Exception {
+    index = personList.getSelectionModel().getSelectedIndex();
+    System.out.println(index);
+    if (index > -1) {
+      Stage stage = new Stage();
+      sureScene.start(stage);
+    }
+  }
+
+  @FXML
+  private void update() throws Exception {
     Connection conn = PostgreSQL.connect();
     String newName = fields.get("name").getText();
     String newSurname = fields.get("surname").getText();

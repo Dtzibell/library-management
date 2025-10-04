@@ -1,4 +1,4 @@
-package com.dtzi.app;
+package com.dtzi.app.ui;
 
 import com.dtzi.app.pgutils.PostgreSQL;
 
@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.fxml.FXML;
@@ -30,8 +31,8 @@ public class FilterController implements Initializable {
   public void initialize(URL url, ResourceBundle rb) {
   }
 
-  public void resetFilter() {
-    try (Connection conn = PostgreSQL.connect()) {
+  public void resetFilter() throws Exception {
+      Connection conn = PostgreSQL.connect();
       PreparedStatement prep = conn.prepareStatement("""
           SELECT * FROM members WHERE LOWER(name) SIMILAR TO LOWER(?)
           AND LOWER(surname) SIMILAR TO LOWER(?) AND LOWER(id::TEXT) SIMILAR TO LOWER(?)
@@ -45,10 +46,5 @@ public class FilterController implements Initializable {
       MainController.listOfMembers.addAll(PostgreSQL.retrieveMembers(prep.toString(), conn));
       Stage currentStage = (Stage) nameField.getScene().getWindow();
       currentStage.close();
-    } catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
   }
-
-
 }

@@ -1,4 +1,4 @@
-package com.dtzi.app;
+package com.dtzi.app.ui;
 
 import com.dtzi.app.classes.Member;
 import com.dtzi.app.pgutils.PostgreSQL;
@@ -28,10 +28,25 @@ public class AddController implements Initializable {
   private TextField phoneNoField;
   @FXML
   private TextField emailField;
+  @FXML
+  private Button addButton;
+  @FXML
+  private Label wrongEmail;
   
   @Override
   public void initialize(URL url, ResourceBundle rb) {
     IDField.setText(UUID.randomUUID().toString());
+    addButton.setDisable(true);
+    emailField.textProperty().addListener((observable, oldValue, newValue) -> {
+      if (newValue.matches(".*@mymail.[a-z]{3}$")) {
+        addButton.setDisable(false);
+        wrongEmail.setVisible(false);
+      }
+      else {
+        addButton.setDisable(true);
+        wrongEmail.setVisible(true);
+      }
+    });
   }
 
   public void addMember() throws Exception {
@@ -47,5 +62,4 @@ public class AddController implements Initializable {
     Stage currentStage = (Stage) nameField.getScene().getWindow();
     currentStage.close();
   }
-
 }
