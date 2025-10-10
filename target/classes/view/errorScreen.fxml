@@ -13,6 +13,6 @@
 <AnchorPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
   fx:controller="com.dtzi.app.controllers.EmptyController" prefHeight="200" prefWidth="400">
   <children>
-    <Label AnchorPane.topAnchor="20" AnchorPane.bottomAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.leftAnchor="20" text="an error occurred. Please report to github.com/Dtzibell/library-management/issues/."/>
+    <Label AnchorPane.topAnchor="20" AnchorPane.bottomAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.leftAnchor="20" text="an error occurred. Please report to github.com/Dtzibell/library-management/issues/." wrapText="true"/>
   </children>
 </AnchorPane>

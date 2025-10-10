@@ -3,6 +3,7 @@ package com.dtzi.app;
 import com.dtzi.app.classes.Book;
 import com.dtzi.app.classes.Member;
 import com.dtzi.app.controllers.ConfirmationController;
+import com.dtzi.app.controllers.EmptyController;
 import com.dtzi.app.pgutils.PostgreSQL;
 import com.dtzi.app.ui.*;
 
@@ -10,8 +11,10 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.ListView;
@@ -19,6 +22,7 @@ import javafx.scene.control.TextArea;
 import javafx.fxml.Initializable;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.collections.FXCollections;
@@ -38,6 +42,7 @@ public class MainController implements Initializable{
   // ---------------------
   @FXML
   private ListView<Member> personList;
+  @FXML private GridPane memberGrid;
 
   @FXML
   private TextField textName;
@@ -84,13 +89,6 @@ public class MainController implements Initializable{
   private AddScene<Book> bookAddScene = new AddScene<Book>(new Book());
   private ConfirmationScene confirmationScene = new ConfirmationScene();
 
-  public void start(Stage stage) throws Exception{
-    Parent root = FXMLLoader.load(getClass().getResource("/view/mainScreen.fxml"));
-    Scene scene = new Scene(root);
-    stage.setScene(scene);
-    stage.show();
-  }
-  
   @Override
   public void initialize(URL url, ResourceBundle rb) {
     try {
@@ -141,8 +139,25 @@ public class MainController implements Initializable{
           textID.setText(newValue.IDProperty().get());
           textPhoneNo.setText(newValue.phoneNumberProperty().get());
           textEmail.setText(newValue.emailProperty().get());
+          memberGrid.getChildren().removeIf(node -> {
+            Integer rowIndex = GridPane.getRowIndex(node);
+            return rowIndex != null && rowIndex >= 6;
+          });
+          try {
+            PreparedStatement prep = conn.prepareStatement("SELECT * FROM loans WHERE user_id = ?::uuid");
+            prep.setString(1, textID.getText());
+            ResultSet loans = prep.executeQuery();
+            int row = 6;
+            while (loans.next()){
+              Label bookLabel = new Label(loans.getString("isbn"));
+              memberGrid.add(bookLabel, 0, row++);
+            }
+          } catch (Exception e){
+            System.out.println(e.getMessage());
+          }
         }
-      });
+      }
+      );
 
       bookList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
         if (newValue != null) {
@@ -153,7 +168,7 @@ public class MainController implements Initializable{
         }
       });
     } catch (SQLException e) {
-      System.out.println(e.getMessage());
+        System.out.println(e.getMessage());
     }
     textPubYear.textProperty().addListener((observable, oldValue, newValue) -> {
       if (newValue.matches("[0-9]*"))
@@ -221,13 +236,14 @@ public class MainController implements Initializable{
     PreparedStatement prep = conn.prepareStatement("""
         BEGIN;
         INSERT INTO loans(user_id, isbn, date) VALUES(?::uuid,?,?);
-        UPDATE books SET available = falls WHERE isbn = ?;
+        UPDATE books SET available = 'false' WHERE isbn = ?;
         COMMIT;""");
     prep.setString(1, mem.IDProperty().get());
     prep.setString(2, book.ISBNProperty().get());
     prep.setDate(3, Date.valueOf(LocalDate.now()));
     prep.setString(4, book.ISBNProperty().get());
     prep.executeUpdate();
+    System.out.println(prep.toString());
   }
 
   @FXML 

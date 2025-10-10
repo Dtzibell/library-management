@@ -3,6 +3,11 @@ package com.dtzi.app.pgutils;
 import com.dtzi.app.classes.Book;
 import com.dtzi.app.classes.Member;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -62,7 +67,7 @@ public interface PostgreSQL {
         extractedBooks.add(newBook);
       }
     } catch (SQLException e) {
-      System.err.println(e.getMessage());
+      System.out.println(e.getMessage());
     }
     return extractedBooks; 
   }
@@ -89,7 +94,7 @@ public interface PostgreSQL {
         extractedMembers.add(newMember);
       }
     } catch (SQLException e) {
-      System.err.println(e.getMessage());
+        System.out.println(e.getMessage());
     }
     return extractedMembers; 
   }

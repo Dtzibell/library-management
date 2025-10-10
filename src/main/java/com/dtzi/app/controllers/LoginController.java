@@ -3,17 +3,20 @@ package com.dtzi.app.controllers;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import com.dtzi.app.MainController;
 import com.dtzi.app.pgutils.PostgreSQL;
 import com.dtzi.app.pgutils.PostgreSQL.ConnData;
+import com.dtzi.app.ui.MainScene;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class LoginController implements Initializable {
-  MainController mainContr = new MainController();
+  MainScene mainScene = new MainScene();
 
   @FXML
   TextField textIP;
@@ -28,12 +31,15 @@ public class LoginController implements Initializable {
 
   public void login() {
     try {
-      ConnData.setURI(textIP.getText());
-      ConnData.setUser(textUsername.getText());
-      ConnData.setPass(textPassword.getText());
+      // ConnData.setURI(textIP.getText());
+      // ConnData.setUser(textUsername.getText());
+      // ConnData.setPass(textPassword.getText());
+      ConnData.setURI("192.168.2.229");
+      ConnData.setUser("postgres");
+      ConnData.setPass("grespost");
       PostgreSQL.connect();
       Stage stage = new Stage();
-      mainContr.start(stage);
+      mainScene.start(stage);
       Stage curStage = (Stage) textIP.getScene().getWindow();
       curStage.close();
     } catch (Exception e) {

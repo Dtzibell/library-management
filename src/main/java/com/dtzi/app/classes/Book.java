@@ -12,6 +12,10 @@ import java.util.List;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 public class Book {
   
@@ -43,9 +47,8 @@ public class Book {
       prep.setString(4,ISBN);
       System.out.println(prep.toString());
     } catch (SQLException e) {
-      System.out.println(e.getErrorCode() + e.getMessage());
+      System.out.println(e.getMessage());
     }
-
   }
 
   public SimpleStringProperty ISBNProperty() {

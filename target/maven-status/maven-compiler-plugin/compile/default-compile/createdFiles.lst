@@ -13,6 +13,7 @@ com/dtzi/app/controllers/MemberFilterController.class
 com/dtzi/app/controllers/ConfirmationController.class
 com/dtzi/app/MainController$1.class
 com/dtzi/app/classes/Member.class
+com/dtzi/app/ui/MainScene.class
 com/dtzi/app/pgutils/PostgreSQL$ConnData.class
 com/dtzi/app/controllers/LoginController.class
 com/dtzi/app/pgutils/PostgreSQL.class

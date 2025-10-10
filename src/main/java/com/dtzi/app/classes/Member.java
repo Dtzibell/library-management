@@ -6,6 +6,10 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 import java.sql.SQLException;
 import java.sql.Connection;
@@ -81,8 +85,8 @@ public class Member {
       prep.setString(5,userEmail);
       System.out.print(prep.toString());
     } catch (SQLException e) {
-      System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
-    }
+      System.out.println(e.getMessage());
+    } 
   }
 
   // Initializer without sql injection
