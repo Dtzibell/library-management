@@ -12,10 +12,22 @@ import java.util.List;
 import java.util.ArrayList;
 
 public interface PostgreSQL {
-  public interface ConnData {
-    static String uri = "jdbc:postgresql://localhost:5432/postgres";
-    static String user = "postgres";
-    static String passw = "grespost";
+  public class ConnData {
+    static String uri;
+    static String user;
+    static String passw;
+
+    public static void setURI(String newURI) {
+      uri = "jdbc:postgresql://" + newURI + ":5432/postgres";
+    }
+
+    public static void setUser(String newUser) {
+      user = newUser;
+    }
+
+    public static void setPass(String newPass) {
+      passw = newPass;
+    }
   }
 
   //public static function
@@ -24,7 +36,7 @@ public interface PostgreSQL {
   //
   //returns Connection connection
   public static Connection connect() throws SQLException {
-    final Connection connection = DriverManager.getConnection(
+    Connection connection = DriverManager.getConnection(
         ConnData.uri, ConnData.user, ConnData.passw);
     return connection;
   }

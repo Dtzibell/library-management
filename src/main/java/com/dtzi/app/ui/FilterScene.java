@@ -17,9 +17,9 @@ public class FilterScene<T> {
   }
 
   public void start(Stage stage) throws Exception {
-    if (t instanceof Book) {
+    if (t instanceof Member) {
       root = FXMLLoader.load(getClass().getResource("/view/memberFilterScreen.fxml"));
-    } else if (t instanceof Member) {
+    } else if (t instanceof Book) {
       root = FXMLLoader.load(getClass().getResource("/view/bookFilterScreen.fxml"));
     } else {
       root = FXMLLoader.load(getClass().getResource("/view/errorScreen.fxml"));

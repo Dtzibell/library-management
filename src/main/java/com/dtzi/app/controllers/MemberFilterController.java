@@ -28,8 +28,6 @@ public class MemberFilterController implements Initializable {
   @FXML
   private TextField emailField;
 
-  private Runnable runnable;
-  
   @Override
   public void initialize(URL url, ResourceBundle rb) {
   }
@@ -45,6 +43,7 @@ public class MemberFilterController implements Initializable {
       prep.setString(3, IDField.getText()+"%");
       prep.setString(4, phoneNoField.getText()+"%");
       prep.setString(5, emailField.getText()+"%");
+      System.out.println(prep.toString());
       MainController.listOfMembers.clear();
       MainController.listOfMembers.addAll(PostgreSQL.retrieveMembers(prep.toString(), conn));
       Stage currentStage = (Stage) nameField.getScene().getWindow();

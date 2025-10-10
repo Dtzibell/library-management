@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -16,6 +17,7 @@ public class Book {
   
   SimpleIntegerProperty publicationYear;
   SimpleStringProperty title, author, ISBN;
+  SimpleBooleanProperty available;
 
   public Book(){
   }
@@ -36,9 +38,10 @@ public class Book {
     try{
       PreparedStatement prep = conn.prepareStatement("INSERT INTO books(title, author, pub_date, isbn) VALUES(?,?,?,?)");
       prep.setString(1,title);
-      prep.setString(1,author);
-      prep.setInt(1,publicationYear);
-      prep.setString(1,ISBN);
+      prep.setString(2,author);
+      prep.setInt(3,publicationYear);
+      prep.setString(4,ISBN);
+      System.out.println(prep.toString());
     } catch (SQLException e) {
       System.out.println(e.getErrorCode() + e.getMessage());
     }

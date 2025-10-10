@@ -14,6 +14,7 @@ com/dtzi/app/controllers/ConfirmationController.class
 com/dtzi/app/MainController$1.class
 com/dtzi/app/classes/Member.class
 com/dtzi/app/pgutils/PostgreSQL$ConnData.class
+com/dtzi/app/controllers/LoginController.class
 com/dtzi/app/pgutils/PostgreSQL.class
 com/dtzi/app/ui/AddScene.class
 com/dtzi/app/controllers/AddBookController.class

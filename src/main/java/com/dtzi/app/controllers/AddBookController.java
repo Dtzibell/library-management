@@ -41,18 +41,8 @@ public class AddBookController implements Initializable {
 
   public void addBook() throws Exception {
     Connection conn = PostgreSQL.connect();
-    String title = titleField.getText();
-    String author = authorField.getText();
-    String pubDate = pubDateField.getText();
-    String ISBN = ISBNField.getText();
-    PreparedStatement prep = conn.prepareStatement("INSERT INTO books(title, author, pub_date, isbn) VALUES (?,?,?,?);");
-    prep.setString(1, titleField.getText());
-    prep.setString(2, authorField.getText());
-    prep.setInt(3, Integer.parseInt(pubDateField.getText()));
-    prep.setString(4, ISBNField.getText());
     Book newBook = new Book(titleField.getText(), authorField.getText(), Integer.parseInt(pubDateField.getText()), ISBNField.getText(), conn);
     MainController.listOfBooks.add(newBook);
-    System.out.println(prep.toString());
     Stage currentStage = (Stage) titleField.getScene().getWindow();
     currentStage.close();
   }

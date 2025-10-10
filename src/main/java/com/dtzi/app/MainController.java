@@ -2,7 +2,6 @@ package com.dtzi.app;
 
 import com.dtzi.app.classes.Book;
 import com.dtzi.app.classes.Member;
-import com.dtzi.app.controllers.AddBookController;
 import com.dtzi.app.controllers.ConfirmationController;
 import com.dtzi.app.pgutils.PostgreSQL;
 import com.dtzi.app.ui.*;
@@ -84,6 +83,13 @@ public class MainController implements Initializable{
   private FilterScene<Book> bookFilterScene = new FilterScene<Book>(new Book());
   private AddScene<Book> bookAddScene = new AddScene<Book>(new Book());
   private ConfirmationScene confirmationScene = new ConfirmationScene();
+
+  public void start(Stage stage) throws Exception{
+    Parent root = FXMLLoader.load(getClass().getResource("/view/mainScreen.fxml"));
+    Scene scene = new Scene(root);
+    stage.setScene(scene);
+    stage.show();
+  }
   
   @Override
   public void initialize(URL url, ResourceBundle rb) {
@@ -119,9 +125,9 @@ public class MainController implements Initializable{
           } else {
             int titleLength = item.titleProperty().get().length();
             try {
-              setText(new String(item.authorProperty().get() + " " + item.titleProperty().get().substring(0, 20)));
+              setText(new String(item.authorProperty().get() + ": " + item.titleProperty().get().substring(0, 20)));
             } catch (IndexOutOfBoundsException e) {
-              setText(new String(item.authorProperty().get() + " " + item.titleProperty().get().substring(0, titleLength)));
+              setText(new String(item.authorProperty().get() + ": " + item.titleProperty().get().substring(0, titleLength)));
             }
           }
         }
@@ -212,11 +218,21 @@ public class MainController implements Initializable{
     Member mem = personList.getSelectionModel().getSelectedItem();
     Book book = bookList.getSelectionModel().getSelectedItem();
     Connection conn = PostgreSQL.connect();
-    PreparedStatement prep = conn.prepareStatement("INSERT INTO loans(user_id, isbn, date) VALUES(?::uuid,?,?);");
+    PreparedStatement prep = conn.prepareStatement("""
+        BEGIN;
+        INSERT INTO loans(user_id, isbn, date) VALUES(?::uuid,?,?);
+        UPDATE books SET available = falls WHERE isbn = ?;
+        COMMIT;""");
     prep.setString(1, mem.IDProperty().get());
     prep.setString(2, book.ISBNProperty().get());
     prep.setDate(3, Date.valueOf(LocalDate.now()));
+    prep.setString(4, book.ISBNProperty().get());
     prep.executeUpdate();
+  }
+
+  @FXML 
+  private void returnBook() throws Exception {
+    // a
   }
 
   @FXML
