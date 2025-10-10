@@ -1,5 +1,6 @@
-package com.dtzi.app.ui;
+package com.dtzi.app.controllers;
 
+import com.dtzi.app.MainController;
 import com.dtzi.app.classes.Member;
 import com.dtzi.app.pgutils.PostgreSQL;
 
@@ -16,7 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
-public class AddController implements Initializable {
+public class AddMemberController implements Initializable {
   
   @FXML
   private TextField nameField;
@@ -52,13 +53,7 @@ public class AddController implements Initializable {
   public void addMember() throws Exception {
     Connection conn = PostgreSQL.connect();
     Member newMem = new Member(nameField.getText(), surnameField.getText(), IDField.getText(), phoneNoField.getText(), emailField.getText(), conn);
-    PreparedStatement prep = conn.prepareStatement("INSERT INTO members(name,surname,id,phone_no,email) VALUES (?,?,?::uuid,?,?)");
-    prep.setString(1, newMem.firstNameProperty().get());
-    prep.setString(2, newMem.surnameProperty().get());
-    prep.setString(3, newMem.IDProperty().get());
-    prep.setString(4, newMem.phoneNumberProperty().get());
-    prep.setString(5, newMem.emailProperty().get());
-    prep.executeUpdate();
+    MainController.listOfMembers.add(newMem);
     Stage currentStage = (Stage) nameField.getScene().getWindow();
     currentStage.close();
   }

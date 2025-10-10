@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.collections.ObservableList?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<AnchorPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="com.dtzi.app.controllers.AddMemberController">
+  <children>
+    <GridPane AnchorPane.topAnchor="20" AnchorPane.bottomAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.leftAnchor="20" hgap="5" vgap="5">
+      <Label text="Title:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+      <Label text="Author:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+      <Label text="pub_date:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+      <Label text="ISBN:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+      <TextField fx:id="titleField" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+      <TextField fx:id="authorField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+      <Label fx:id="pubDateField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+      <TextField fx:id="ISBNField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+      <!-- <Label fx:id="wrongISBN" text="ISBN is incorrect. It must consist of 10 characters" GridPane.columnIndex="1" GridPane.rowIndex="5" wrapText="true"/>-->
+      <Button fx:id="addButton" defaultButton="true" text="Add" onAction="#addBook" GridPane.columnIndex="0" GridPane.rowIndex="6" GridPane.columnSpan="2"/>
+    </GridPane>
+  </children>
+</AnchorPane>

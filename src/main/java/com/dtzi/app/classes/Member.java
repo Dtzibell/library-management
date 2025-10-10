@@ -54,6 +54,11 @@ public class Member {
   Email userEmail;
   SimpleStringProperty userName, userSurname, userID, userPhoneNumber;
 
+  // Dummy initializer for object dependent scenes
+  public Member (){
+  }
+
+  // Initializer with instant injection into sql
   public Member (String userName, String userSurname, String userID,
       String userPhoneNumber, String userEmail, Connection conn) {
     try {
@@ -80,6 +85,7 @@ public class Member {
     }
   }
 
+  // Initializer without sql injection
   public Member (String userName, String userSurname, 
       String userID, String userPhoneNumber, String userEmail) {
     try {
@@ -104,7 +110,7 @@ public class Member {
     this.userName = new SimpleStringProperty(userName);
     this.userSurname = new SimpleStringProperty(userSurname);
     this.userID = new SimpleStringProperty(UUID.randomUUID().toString());
-    this.userPhoneNumber = new SimpleStringProperty(userPhoneNumber );
+    this.userPhoneNumber = new SimpleStringProperty(userPhoneNumber);
   }
 
   // public static Callback<Member, Observable[]> extractor = p -> new Observable[] {p.surnameProperty(), p.firstNameProperty()};
@@ -136,12 +142,12 @@ public class Member {
   //public function
   //returns nothing
   public void setUserID (String newID) {
-    this.userID = new SimpleStringProperty(newID); 
+    this.userID.set(newID); 
   }
   //public function
   //returns nothing
   public void setPhoneNumber (String newPhoneNumber) {
-    this.userPhoneNumber = new SimpleStringProperty(newPhoneNumber); 
+    this.userPhoneNumber.set(newPhoneNumber); 
   }
   //public function
   //returns nothing
@@ -151,11 +157,11 @@ public class Member {
   //public function
   //returns nothing
   public void setName (String newUserName) {
-    this.userName = new SimpleStringProperty(newUserName); 
+    this.userName.set(newUserName); 
   }
   //public function
   //returns nothing
   public void setSurname (String newUserSurname) {
-    this.userSurname = new SimpleStringProperty(newUserSurname); 
+    this.userSurname.set(newUserSurname); 
   }
 }

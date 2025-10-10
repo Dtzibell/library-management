@@ -1,16 +1,29 @@
 package com.dtzi.app.ui;
+import com.dtzi.app.classes.Book;
+import com.dtzi.app.classes.Member;
+
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-public class AddScene {
+public class AddScene<T> {
+  Parent root;
+  T t;
 
-  public AddScene() {
+  public AddScene(T object) {
+    t = object;
   }
 
   public void start(Stage stage) throws Exception {
-    Parent root = FXMLLoader.load(getClass().getResource("/view/addScreen.fxml"));
+    if (t instanceof Member) {
+      root = FXMLLoader.load(getClass().getResource("/view/addMemberScreen.fxml"));
+    } else if (t instanceof Book) {
+      root = FXMLLoader.load(getClass().getResource("/view/addBookScreen.fxml"));
+    } else {
+      root = FXMLLoader.load(getClass().getResource("/view/errorScreen.fxml"));
+      System.err.println("No valid root for new scene");
+    }
     Scene scene = new Scene(root);
     stage.setScene(scene);
     stage.show();

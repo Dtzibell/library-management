@@ -1,6 +1,7 @@
 package com.dtzi.app.classes;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -8,55 +9,82 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Book {
-  int publicationYear;
-  String title, author, ISBN;
-  boolean availability;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 
-  public Book(String title, String author, int publicationYear, String ISBN) {
-    this.title = title;
-    this.author = author;
-    this.publicationYear = publicationYear;
-    this.ISBN = ISBN;
+public class Book {
+  
+  SimpleIntegerProperty publicationYear;
+  SimpleStringProperty title, author, ISBN;
+
+  // boolean availability;
+  
+  // Dummy initializer for object dependent scenes
+  public Book(){
   }
 
-  public String getISBN() {
+  public Book(String title, String author, int publicationYear, String ISBN) {
+    this.title = new SimpleStringProperty(title);
+    this.author = new SimpleStringProperty(author);
+    this.publicationYear = new SimpleIntegerProperty(publicationYear);
+    this.ISBN = new SimpleStringProperty(ISBN);
+  }
+
+  public Book(String title, String author, int publicationYear, String ISBN, Connection conn) {
+    this.title = new SimpleStringProperty(title);
+    this.author = new SimpleStringProperty(author);
+    this.publicationYear = new SimpleIntegerProperty(publicationYear);
+    this.ISBN = new SimpleStringProperty(ISBN);
+
+    try{
+      PreparedStatement prep = conn.prepareStatement("INSERT INTO books(title, author, pub_date, isbn) VALUES(?,?,?,?)");
+      prep.setString(1,title);
+      prep.setString(1,author);
+      prep.setInt(1,publicationYear);
+      prep.setString(1,ISBN);
+    } catch (SQLException e) {
+      System.out.println(e.getErrorCode() + e.getMessage());
+    }
+
+  }
+
+  public SimpleStringProperty ISBNProperty() {
     return this.ISBN;
   }
 
-  public int getPubYear() {
+  public SimpleIntegerProperty pubYearProperty() {
     return this.publicationYear;
   }
 
-  public String getTitle() {
+  public SimpleStringProperty titleProperty() {
     return this.title;
   }
 
-  public String getAuthor() {
+  public SimpleStringProperty authorProperty() {
     return this.author;
   }
 
-  public boolean getAvail() {
-    return this.availability;
-  }
+  // public boolean getAvail() {
+  //   return this.availability;
+  // }
 
-  public void setAvail(boolean newAvail) {
-    this.availability = newAvail;
-  }
+  // public void setAvail(boolean newAvail) {
+  //   this.availability = newAvail;
+  // }
 
   public void setISBN(String newISBN) {
-    this.ISBN = newISBN;
+    this.ISBN.set(newISBN);
   }
 
   public void setPubYear(int newPubYear) {
-    this.publicationYear = newPubYear;
+    this.publicationYear.set(newPubYear);
   }
 
   public void setTitle(String newTitle) {
-    this.title = newTitle;
+    this.title.set(newTitle);
   }
 
   public void setAuthor(String newAuthor) {
-    this.title = newAuthor;
+    this.title.set(newAuthor);
   }
 }

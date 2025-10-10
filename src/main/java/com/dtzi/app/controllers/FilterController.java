@@ -1,6 +1,7 @@
-package com.dtzi.app.ui;
+package com.dtzi.app.controllers;
 
 import com.dtzi.app.pgutils.PostgreSQL;
+import com.dtzi.app.MainController;
 
 import java.net.URL;
 import java.sql.Connection;
