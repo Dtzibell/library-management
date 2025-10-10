@@ -9,17 +9,21 @@ import javafx.fxml.FXMLLoader;
 
 public class App extends Application {
 
-    @Override
-    public void start(Stage stage) throws Exception {
-      Parent root = FXMLLoader.load(getClass().getResource("/view/mainScreen.fxml"));
-      Scene scene = new Scene(root, Color.ALICEBLUE);
-      stage.setTitle("test");
-      stage.setScene(scene);
-      stage.show();
-    }
+  MainController mainContr;
 
-    public static void main(String[] args) {
-      launch(args);
-    }
+  @Override
+  public void start(Stage stage) throws Exception {
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/mainScreen.fxml"));
+    Parent root = loader.load();
+    mainContr = loader.getController();
+    Scene scene = new Scene(root, Color.ALICEBLUE);
+    stage.setTitle("test");
+    stage.setScene(scene);
+    stage.show();
+  }
+
+  public static void main(String[] args) {
+    launch(args);
+  }
 
 }

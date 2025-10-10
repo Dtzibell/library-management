@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
-public class FilterController implements Initializable {
+public class MemberFilterController implements Initializable {
   
   @FXML
   private TextField nameField;
@@ -27,6 +27,8 @@ public class FilterController implements Initializable {
   private TextField phoneNoField;
   @FXML
   private TextField emailField;
+
+  private Runnable runnable;
   
   @Override
   public void initialize(URL url, ResourceBundle rb) {

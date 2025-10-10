@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.util.ResourceBundle;
 
 import com.dtzi.app.MainController;
+import com.dtzi.app.classes.Book;
 import com.dtzi.app.classes.Member;
 import com.dtzi.app.pgutils.PostgreSQL;
 
@@ -46,6 +47,20 @@ public class ConfirmationController implements Initializable {
       prep.executeUpdate();
       System.out.println(prep.toString());
       MainController.listOfMembers.remove(toDelete);
+      closeWindow();
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
+  public void removeBook() {
+    try {
+      Connection conn = PostgreSQL.connect();
+      Book toDelete = MainController.listOfBooks.get(MainController.bookIndex);
+      PreparedStatement prep = conn.prepareStatement("DELETE FROM books WHERE isbn = ?");
+      prep.setString(1, toDelete.ISBNProperty().get());
+      prep.executeUpdate();
+      MainController.listOfBooks.remove(toDelete);
       closeWindow();
     } catch (Exception e) {
       System.out.println(e.getMessage());

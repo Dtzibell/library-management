@@ -17,9 +17,6 @@ public class Book {
   SimpleIntegerProperty publicationYear;
   SimpleStringProperty title, author, ISBN;
 
-  // boolean availability;
-  
-  // Dummy initializer for object dependent scenes
   public Book(){
   }
 
@@ -63,14 +60,6 @@ public class Book {
   public SimpleStringProperty authorProperty() {
     return this.author;
   }
-
-  // public boolean getAvail() {
-  //   return this.availability;
-  // }
-
-  // public void setAvail(boolean newAvail) {
-  //   this.availability = newAvail;
-  // }
 
   public void setISBN(String newISBN) {
     this.ISBN.set(newISBN);

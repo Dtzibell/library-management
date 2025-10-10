@@ -2,17 +2,21 @@ package com.dtzi.app;
 
 import com.dtzi.app.classes.Book;
 import com.dtzi.app.classes.Member;
+import com.dtzi.app.controllers.AddBookController;
 import com.dtzi.app.controllers.ConfirmationController;
 import com.dtzi.app.pgutils.PostgreSQL;
 import com.dtzi.app.ui.*;
 
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.fxml.Initializable;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TextField;
@@ -53,18 +57,20 @@ public class MainController implements Initializable{
   // ---------------------
   // BOOK SIDE
   // ---------------------
-  // @FXML
-  // private ListView<Book> bookList;
   @FXML
-  private TextField textTitle;
+  private ListView<Book> bookList;
+  @FXML
+  private TextArea textTitle;
   @FXML
   private TextField textAuthor;
   @FXML
   private TextField textPubYear;
   @FXML
-  private TextField textISBN;
+  private Label textISBN;
   @FXML
   private Button bookFilterButton;
+  @FXML
+  private Button bookUpdateButton;
 
 
   // static
@@ -72,10 +78,11 @@ public class MainController implements Initializable{
   public static int bookIndex;
   
   // Windows init
+  // TODO: passing objects into inits is ultra messy. Other solutions?
   private FilterScene<Member> memberFilterScene = new FilterScene<Member>(new Member());
   private AddScene<Member> memberAddScene = new AddScene<Member>(new Member());
- //  private FilterScene<Book> bookFilterScene = new FilterScene<Book>();
- //  private AddScene<Book> bookAddScene = new AddScene<Book>();
+  private FilterScene<Book> bookFilterScene = new FilterScene<Book>(new Book());
+  private AddScene<Book> bookAddScene = new AddScene<Book>(new Book());
   private ConfirmationScene confirmationScene = new ConfirmationScene();
   
   @Override
@@ -86,8 +93,8 @@ public class MainController implements Initializable{
       listOfMembers = FXCollections.observableArrayList(PostgreSQL.retrieveMembers("SELECT * FROM members LIMIT 20", conn));
       personList.setItems(listOfMembers);
 
-      // listOfBooks = FXCollections.observableArrayList(PostgreSQL.retrieveBooks("SELECT * FROM books LIMIT 20", conn));
-      // bookList.setItems(listOfBooks);
+      listOfBooks = FXCollections.observableArrayList(PostgreSQL.retrieveBooks("SELECT * FROM books LIMIT 20", conn));
+      bookList.setItems(listOfBooks);
 
       personList.setCellFactory(p -> new ListCell<>() {
         @Override
@@ -102,18 +109,23 @@ public class MainController implements Initializable{
         }
       });
 
-      // bookList.setCellFactory(p -> new ListCell<Book>() {
-      //   @Override
-      //   protected void updateItem(Book item, boolean empty) {
-      //     super.updateItem(item, empty);
+      bookList.setCellFactory(p -> new ListCell<Book>() {
+        @Override
+        protected void updateItem(Book item, boolean empty) {
+          super.updateItem(item, empty);
 
-      //     if (item == null || empty) {
-      //       setText(null);
-      //     } else {
-      //       setText(new String(item.authorProperty().get() + " " + item.titleProperty().get().substring(0,20)));
-      //     }
-      //   }
-      // });
+          if (item == null || empty) {
+            setText(null);
+          } else {
+            int titleLength = item.titleProperty().get().length();
+            try {
+              setText(new String(item.authorProperty().get() + " " + item.titleProperty().get().substring(0, 20)));
+            } catch (IndexOutOfBoundsException e) {
+              setText(new String(item.authorProperty().get() + " " + item.titleProperty().get().substring(0, titleLength)));
+            }
+          }
+        }
+      });
 
       // set the textfields to the selected item's properties
       personList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -125,9 +137,24 @@ public class MainController implements Initializable{
           textEmail.setText(newValue.emailProperty().get());
         }
       });
+
+      bookList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        if (newValue != null) {
+          textAuthor.setText(newValue.authorProperty().get());
+          textTitle.setText(newValue.titleProperty().get());
+          textISBN.setText(newValue.ISBNProperty().get());
+          textPubYear.setText(Integer.toString(newValue.pubYearProperty().get()));
+        }
+      });
     } catch (SQLException e) {
       System.out.println(e.getMessage());
     }
+    textPubYear.textProperty().addListener((observable, oldValue, newValue) -> {
+      if (newValue.matches("[0-9]*"))
+        bookUpdateButton.setDisable(false);
+      else
+        bookUpdateButton.setDisable(true);
+    });
 
   }
 
@@ -147,20 +174,16 @@ public class MainController implements Initializable{
   private void removeMember() throws Exception {
     memberIndex = personList.getSelectionModel().getSelectedIndex();
     if (memberIndex > -1) {
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/confirmationScreen.fxml"));
-      Parent root = loader.load();
-      ConfirmationController contr = loader.getController();
-      contr.setRunnable(contr::removeMember);
-      Scene scene = new Scene(root);
       Stage stage = new Stage();
-      stage.setScene(scene);
-      confirmationScene.start(stage);
+      ConfirmationController contr = confirmationScene.start(stage);
+      contr.setRunnable(contr::removeMember);
     }
   }
 
   @FXML
   private void updateMember() throws Exception {
     String userID = textID.getText();
+    System.out.println(personList.getSelectionModel().getSelectedItem());
     if (userID != "") {
       Connection conn = PostgreSQL.connect();
       String newName = textName.getText();
@@ -184,26 +207,61 @@ public class MainController implements Initializable{
     }
   }
 
-  // @FXML
-  // private void loan() throws Exception {
-  // }
+  @FXML
+  private void loan() throws Exception {
+    Member mem = personList.getSelectionModel().getSelectedItem();
+    Book book = bookList.getSelectionModel().getSelectedItem();
+    Connection conn = PostgreSQL.connect();
+    PreparedStatement prep = conn.prepareStatement("INSERT INTO loans(user_id, isbn, date) VALUES(?::uuid,?,?);");
+    prep.setString(1, mem.IDProperty().get());
+    prep.setString(2, book.ISBNProperty().get());
+    prep.setDate(3, Date.valueOf(LocalDate.now()));
+    prep.executeUpdate();
+  }
 
-  // @FXML
-  // private void addBook() throws Exception {
-  //   // Connection conn = PostgreSQL.connect();
-  //   // PreparedStatement prep = conn.prepareStatement("INSERT INTO books(title, author, pub_date, ISBN) VALUES(?,?,?,?)");
-  // }
+  @FXML
+  private void addBook() throws Exception {
+    Stage stage = new Stage();
+    bookAddScene.start(stage);
+  }
 
-  // @FXML
-  // private void updateBook() throws Exception {
-  // }
+  @FXML
+  private void updateBook() throws Exception {
+    String userID = textTitle.getText();
+    System.out.println(bookList.getSelectionModel().getSelectedItem());
+    if (userID != "") {
+      Connection conn = PostgreSQL.connect();
+      String newTitle = textTitle.getText();
+      String newAuthor = textAuthor.getText();
+      int newPubYear = Integer.parseInt(textPubYear.getText());
+      PreparedStatement prep =  conn.prepareStatement("UPDATE books SET " +
+          "title = ?, author = ?, pub_date = ? WHERE isbn = ?");
+      prep.setString(1, newTitle);
+      prep.setString(2, newAuthor);
+      prep.setInt(3, newPubYear);
+      prep.setString(4, textISBN.textProperty().get());
+      prep.executeUpdate();
+      Book toChange = bookList.getSelectionModel().getSelectedItem();
+      toChange.setTitle(newTitle);
+      toChange.setAuthor(newAuthor);
+      toChange.setPubYear(newPubYear);
+      personList.refresh();
+    }
+  }
 
-  // @FXML 
-  // private void removeBook() throws Exception {
-  //   bookIndex = bookList.getSelectionModel().getSelectedIndex();
-  //   if (bookIndex > -1) {
-  //     Stage stage = new Stage();
-  //     confirmationScene.start(stage);
-  //   }
-  // }
+  @FXML
+  private void removeBook() throws Exception {
+    bookIndex = bookList.getSelectionModel().getSelectedIndex();
+    if (bookIndex > -1) {
+      Stage stage = new Stage();
+      ConfirmationController contr = confirmationScene.start(stage);
+      contr.setRunnable(contr::removeBook);
+    }
+  }
+
+  @FXML
+  private void filterBooks() throws Exception {
+    Stage stage = new Stage();
+    bookFilterScene.start(stage);
+  }
 }

@@ -4,10 +4,11 @@
 /home/tauras/library-management-system/src/main/java/com/dtzi/app/classes/Member.java
 /home/tauras/library-management-system/src/main/java/com/dtzi/app/controllers/AddBookController.java
 /home/tauras/library-management-system/src/main/java/com/dtzi/app/controllers/AddMemberController.java
+/home/tauras/library-management-system/src/main/java/com/dtzi/app/controllers/BookFilterController.java
 /home/tauras/library-management-system/src/main/java/com/dtzi/app/controllers/ConfirmationController.java
 /home/tauras/library-management-system/src/main/java/com/dtzi/app/controllers/EmptyController.java
-/home/tauras/library-management-system/src/main/java/com/dtzi/app/controllers/FilterController.java
 /home/tauras/library-management-system/src/main/java/com/dtzi/app/controllers/LoanController.java
+/home/tauras/library-management-system/src/main/java/com/dtzi/app/controllers/MemberFilterController.java
 /home/tauras/library-management-system/src/main/java/com/dtzi/app/helpers/Population.java
 /home/tauras/library-management-system/src/main/java/com/dtzi/app/pgutils/PostgreSQL.java
 /home/tauras/library-management-system/src/main/java/com/dtzi/app/ui/AddScene.java

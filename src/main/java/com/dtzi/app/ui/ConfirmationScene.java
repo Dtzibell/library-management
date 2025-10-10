@@ -20,10 +20,13 @@ public class ConfirmationScene {
   public ConfirmationScene() {
   }
 
-  public void start(Stage stage) throws Exception {
-    root = FXMLLoader.load(getClass().getResource("/view/confirmationScreen.fxml"));
+  public ConfirmationController start(Stage stage) throws Exception {
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/confirmationScreen.fxml"));
+    Parent root = loader.load();
+    ConfirmationController contr = loader.getController();
     Scene scene = new Scene(root);
     stage.setScene(scene);
     stage.show();
+    return contr;
   }
 }

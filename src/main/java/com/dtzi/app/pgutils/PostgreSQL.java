@@ -52,7 +52,6 @@ public interface PostgreSQL {
     } catch (SQLException e) {
       System.err.println(e.getMessage());
     }
-    System.out.println(extractedBooks);
     return extractedBooks; 
   }
   
