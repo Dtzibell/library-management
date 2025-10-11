@@ -2,11 +2,13 @@ com/dtzi/app/MainController$2.class
 com/dtzi/app/App.class
 com/dtzi/app/MainController.class
 com/dtzi/app/classes/Member$Email.class
+com/dtzi/app/classes/DBObject.class
 com/dtzi/app/classes/Book.class
 com/dtzi/app/ui/ConfirmationScene.class
 com/dtzi/app/controllers/BookFilterController.class
 com/dtzi/app/helpers/Population.class
 com/dtzi/app/controllers/AddMemberController.class
+com/dtzi/app/ui/ErrorScene.class
 com/dtzi/app/classes/Member$Email$EmailVerificationException.class
 com/dtzi/app/controllers/EmptyController.class
 com/dtzi/app/controllers/MemberFilterController.class

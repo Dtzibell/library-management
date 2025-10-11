@@ -1,12 +1,14 @@
 package com.dtzi.app;
 
 import com.dtzi.app.classes.Book;
+import com.dtzi.app.classes.DBObject;
 import com.dtzi.app.classes.Member;
 import com.dtzi.app.controllers.ConfirmationController;
-import com.dtzi.app.controllers.EmptyController;
 import com.dtzi.app.pgutils.PostgreSQL;
 import com.dtzi.app.ui.*;
+import com.sun.net.httpserver.Authenticator.Result;
 
+import java.awt.Desktop.Action;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Date;
@@ -14,7 +16,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.ListView;
@@ -25,23 +26,21 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.collections.FXCollections;
 import javafx.scene.control.ListCell;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
-public class MainController implements Initializable{
-  
+public class MainController implements Initializable {
+
   public Connection conn;
 
   // ---------------------
@@ -49,7 +48,7 @@ public class MainController implements Initializable{
   // ---------------------
   @FXML
   private ListView<Member> personList;
-  @FXML 
+  @FXML
   private VBox memberForm;
 
   @FXML
@@ -84,11 +83,10 @@ public class MainController implements Initializable{
   @FXML
   private Button bookUpdateButton;
 
-
   // static
   public static ObservableList<Book> listOfBooks;
   public static int bookIndex;
-  
+
   // Windows init
   // TODO: passing objects into inits is ultra messy. Other solutions?
   private FilterScene<Member> memberFilterScene = new FilterScene<Member>(new Member());
@@ -96,6 +94,7 @@ public class MainController implements Initializable{
   private FilterScene<Book> bookFilterScene = new FilterScene<Book>(new Book());
   private AddScene<Book> bookAddScene = new AddScene<Book>(new Book());
   private ConfirmationScene confirmationScene = new ConfirmationScene();
+  private ErrorScene errorScene = new ErrorScene();
 
   private Clipboard clipboard = Clipboard.getSystemClipboard();
   private ClipboardContent content = new ClipboardContent();
@@ -105,7 +104,8 @@ public class MainController implements Initializable{
     try {
       Connection conn = PostgreSQL.connect();
 
-      listOfMembers = FXCollections.observableArrayList(PostgreSQL.retrieveMembers("SELECT * FROM members LIMIT 20", conn));
+      listOfMembers = FXCollections
+          .observableArrayList(PostgreSQL.retrieveMembers("SELECT * FROM members LIMIT 20", conn));
       personList.setItems(listOfMembers);
 
       listOfBooks = FXCollections.observableArrayList(PostgreSQL.retrieveBooks("SELECT * FROM books LIMIT 20", conn));
@@ -119,7 +119,7 @@ public class MainController implements Initializable{
           if (item == null || empty) {
             setText(null);
           } else {
-            setText(new String(item.firstNameProperty().get() + " " + item.surnameProperty().get()));
+            setText(new String(item.getName() + " " + item.getSurname()));
           }
         }
       });
@@ -132,11 +132,11 @@ public class MainController implements Initializable{
           if (item == null || empty) {
             setText(null);
           } else {
-            int titleLength = item.titleProperty().get().length();
+            int titleLength = item.getTitle().length();
             try {
-              setText(new String(item.authorProperty().get() + ": " + item.titleProperty().get().substring(0, 20)));
+              setText(new String(item.getAuthor() + ": " + item.getTitle().substring(0, 20)));
             } catch (IndexOutOfBoundsException e) {
-              setText(new String(item.authorProperty().get() + ": " + item.titleProperty().get().substring(0, titleLength)));
+              setText(new String(item.getAuthor() + ": " + item.getTitle().substring(0, titleLength)));
             }
           }
         }
@@ -145,45 +145,19 @@ public class MainController implements Initializable{
       // set the textfields to the selected item's properties
       personList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
         if (newValue != null) {
-          textName.setText(newValue.firstNameProperty().get());
-          textSurname.setText(newValue.surnameProperty().get());
-          textID.setText(newValue.IDProperty().get());
-          textPhoneNo.setText(newValue.phoneNumberProperty().get());
-          textEmail.setText(newValue.emailProperty().get());
+          replaceFieldText(newValue);
           ObservableList<Node> nodeList = memberForm.getChildren();
           try {
             nodeList.remove(3, nodeList.size());
-          } catch (IndexOutOfBoundsException e) {
-          }
-          try {
-            PreparedStatement prep = conn.prepareStatement("SELECT * FROM loans WHERE user_id = ?::uuid");
-            prep.setString(1, textID.getText());
-            ResultSet loans = prep.executeQuery();
-            while (loans.next()){
-              HBox LineBox = new HBox();
-              Label bookLabel = new Label(loans.getString("isbn"));
-              bookLabel.setOnMouseClicked(event -> {
-                content.putString(bookLabel.getText());
-                clipboard.setContent(content);
-              });
-              Button returnBook = new Button("Return");
-              returnBook.setOnAction((event) -> {
-                  try {
-                    returnBook(event);
-                  } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                  }
-              }
-                  );
-              LineBox.getChildren().addAll(bookLabel, returnBook);
-              memberForm.getChildren().add(LineBox);
+            ResultSet loans = getMembersLoans(textID.getText(), conn);
+            while (loans.next()) {
+              addLoanToMemberForm(loans);
             }
-          } catch (Exception e){
+          } catch (Exception e) {
             System.out.println(e.getMessage());
           }
         }
-      }
-      );
+      });
 
       bookList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
         if (newValue != null) {
@@ -193,8 +167,8 @@ public class MainController implements Initializable{
           textPubYear.setText(Integer.toString(newValue.pubYearProperty().get()));
         }
       });
-    } catch (SQLException e) {
-        System.out.println(e.getMessage());
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
     }
     textPubYear.textProperty().addListener((observable, oldValue, newValue) -> {
       if (newValue.matches("[0-9]*"))
@@ -205,22 +179,72 @@ public class MainController implements Initializable{
 
   }
 
+  private void copyToClipboard(MouseEvent event) {
+    Label label = (Label) event.getSource();
+    content.putString(label.getText());
+    clipboard.setContent(content);
+  }
+
+  private ResultSet getMembersLoans(String ID, Connection conn) throws SQLException {
+    PreparedStatement prep = conn.prepareStatement("SELECT * FROM loans WHERE user_id = ?::uuid");
+    prep.setString(1, ID);
+    ResultSet loans = prep.executeQuery();
+    return loans;
+  }
+
+  private void addLoanToMemberForm(ResultSet loans) throws SQLException {
+    HBox LineBox = new HBox();
+    Label bookLabel = new Label(loans.getString("isbn"));
+    bookLabel.setOnMouseClicked(this::copyToClipboard);
+    Button returnBook = new Button("Return");
+    returnBook.setOnAction(this::returnBook);
+    LineBox.getChildren().addAll(bookLabel, returnBook);
+    memberForm.getChildren().add(LineBox);
+  }
+
+  private void replaceFieldText(DBObject selectedObj) {
+    switch (selectedObj) {
+      case Member currSelected -> { 
+      textName.setText(currSelected.getName());
+      textSurname.setText(currSelected.getSurname());
+      textID.setText(currSelected.getID());
+      textPhoneNo.setText(currSelected.getPhoneNo());
+      textEmail.setText(currSelected.getEmail());
+      }
+      case Book currSelected -> {
+      textAuthor.setText(currSelected.getAuthor());
+      textTitle.setText(currSelected.getTitle());
+      textISBN.setText(currSelected.getISBN());
+      textPubYear.setText(Integer.toString(currSelected.getPubYear()));
+      }
+      default -> {
+        throw new IllegalArgumentException("Unsupported object type: " + selectedObj.getClass().getName());
+      }
+    }
+  }
+
   @FXML
-  private void returnBook(ActionEvent event) throws Exception {
-    Button button = (Button) event.getSource();
-    Connection conn = PostgreSQL.connect();
-    HBox parent = (HBox) button.getParent();
-    Label label = (Label) parent.getChildren().get(0);
-    String ISBN = label.getText();
-    PreparedStatement prep = conn.prepareStatement("""
-        BEGIN;
-        UPDATE books SET available = 'true' WHERE isbn = ?;
-        DELETE FROM loans WHERE isbn = ?;
-        COMMIT;
-        """);
-    prep.setString(1, ISBN);
-    prep.setString(2, ISBN);
-    prep.executeUpdate();
+  private void returnBook(ActionEvent event) {
+    try {
+      Button button = (Button) event.getSource();
+      Connection conn = PostgreSQL.connect();
+      HBox parent = (HBox) button.getParent();
+      Label label = (Label) parent.getChildren().get(0);
+      String ISBN = label.getText();
+      PreparedStatement prep = conn.prepareStatement("""
+          BEGIN;
+          UPDATE books SET available = 'true' WHERE isbn = ?;
+          DELETE FROM loans WHERE isbn = ?;
+          COMMIT;
+          """);
+      prep.setString(1, ISBN);
+      prep.setString(2, ISBN);
+      prep.executeUpdate();
+      memberForm.getChildren().remove(button.getParent());
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+    
   }
 
   @FXML
@@ -250,24 +274,13 @@ public class MainController implements Initializable{
     String userID = textID.getText();
     System.out.println(personList.getSelectionModel().getSelectedItem());
     if (userID != "") {
+      Member toChange = personList.getSelectionModel().getSelectedItem();
       Connection conn = PostgreSQL.connect();
       String newName = textName.getText();
       String newSurname = textSurname.getText();
       String newPhoneNo = textPhoneNo.getText();
       String newEmail = textEmail.getText();
-      PreparedStatement prep =  conn.prepareStatement("UPDATE members SET " +
-          "name = ?, surname = ?, phone_no = ?, email = ? WHERE id = ?::uuid");
-      prep.setString(1, newName);
-      prep.setString(2, newSurname);
-      prep.setString(3, newPhoneNo);
-      prep.setString(4, newEmail);
-      prep.setString(5, userID);
-      prep.executeUpdate();
-      Member toChange = personList.getSelectionModel().getSelectedItem();
-      toChange.setName(newName);
-      toChange.setSurname(newSurname);
-      toChange.setPhoneNumber(newPhoneNo);
-      toChange.setEmail(newEmail);
+      toChange.update(newName, newSurname, newPhoneNo, newEmail, conn);
       personList.refresh();
     }
   }
@@ -287,7 +300,10 @@ public class MainController implements Initializable{
     prep.setDate(3, Date.valueOf(LocalDate.now()));
     prep.setString(4, book.ISBNProperty().get());
     prep.executeUpdate();
-    System.out.println(prep.toString());
+    ResultSet loans = getMembersLoans(textID.getText(), conn);
+    while (loans.next()) {
+      addLoanToMemberForm(loans);
+    }
   }
 
   @FXML
@@ -301,21 +317,12 @@ public class MainController implements Initializable{
     String userID = textTitle.getText();
     System.out.println(bookList.getSelectionModel().getSelectedItem());
     if (userID != "") {
+      Book toChange = bookList.getSelectionModel().getSelectedItem();
       Connection conn = PostgreSQL.connect();
       String newTitle = textTitle.getText();
       String newAuthor = textAuthor.getText();
       int newPubYear = Integer.parseInt(textPubYear.getText());
-      PreparedStatement prep =  conn.prepareStatement("UPDATE books SET " +
-          "title = ?, author = ?, pub_date = ? WHERE isbn = ?");
-      prep.setString(1, newTitle);
-      prep.setString(2, newAuthor);
-      prep.setInt(3, newPubYear);
-      prep.setString(4, textISBN.textProperty().get());
-      prep.executeUpdate();
-      Book toChange = bookList.getSelectionModel().getSelectedItem();
-      toChange.setTitle(newTitle);
-      toChange.setAuthor(newAuthor);
-      toChange.setPubYear(newPubYear);
+      toChange.update(newTitle, newAuthor, newPubYear, conn);
       personList.refresh();
     }
   }

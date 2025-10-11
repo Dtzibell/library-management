@@ -2,6 +2,7 @@ package com.dtzi.app.pgutils;
 
 import com.dtzi.app.classes.Book;
 import com.dtzi.app.classes.Member;
+import com.dtzi.app.classes.Member.Email.EmailVerificationException;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -53,23 +54,19 @@ public interface PostgreSQL {
   //public static function
   //@param String sql
   //returns List<Book> extractedBooks
-  public static List<Book> retrieveBooks (String sql, Connection conn) {
-    List<Book> extractedBooks = new ArrayList<>(); 
-    try {
-      Statement statement = conn.createStatement();
-      ResultSet allBooks = statement.executeQuery(sql);
-      while (allBooks.next()) {
-        String bookTitle = allBooks.getString("title");
-        String bookAuthor = allBooks.getString("author");
-        int bookPublicationYear = allBooks.getInt("pub_date");
-        String bookISBN = allBooks.getString("ISBN");
-        Book newBook = new Book(bookTitle, bookAuthor, bookPublicationYear, bookISBN);
-        extractedBooks.add(newBook);
-      }
-    } catch (SQLException e) {
-      System.out.println(e.getMessage());
+  public static List<Book> retrieveBooks(String sql, Connection conn) throws SQLException {
+    List<Book> extractedBooks = new ArrayList<>();
+    Statement statement = conn.createStatement();
+    ResultSet books = statement.executeQuery(sql);
+    while (books.next()) {
+      String bookTitle = books.getString("title");
+      String bookAuthor = books.getString("author");
+      int bookPublicationYear = books.getInt("pub_date");
+      String bookISBN = books.getString("ISBN");
+      Book newBook = new Book(bookTitle, bookAuthor, bookPublicationYear, bookISBN);
+      extractedBooks.add(newBook);
     }
-    return extractedBooks; 
+    return extractedBooks;
   }
   
   // ------------------------
@@ -79,23 +76,19 @@ public interface PostgreSQL {
   //public static function
   //@param String sql
   //returns List<Book> extractedBooks
-  public static List<Member> retrieveMembers (String sql, Connection conn) {
-    List<Member> extractedMembers = new ArrayList<>(); 
-    try {
-      Statement statement = conn.createStatement();
-      ResultSet allMembers = statement.executeQuery(sql);
-      while (allMembers.next()) {
-        String userName = allMembers.getString("name");
-        String userSurname = allMembers.getString("surname");
-        String userID = allMembers.getString("id");
-        String userPhoneNumber = allMembers.getString("phone_no");
-        String userEmail = allMembers.getString("email");
-        Member newMember = new Member(userName, userSurname, userID, userPhoneNumber, userEmail);
-        extractedMembers.add(newMember);
-      }
-    } catch (SQLException e) {
-        System.out.println(e.getMessage());
+  public static List<Member> retrieveMembers (String sql, Connection conn) throws EmailVerificationException, SQLException {
+    List<Member> extractedMembers = new ArrayList<>();
+    Statement statement = conn.createStatement();
+    ResultSet members = statement.executeQuery(sql);
+    while (members.next()) {
+      String userName = members.getString("name");
+      String userSurname = members.getString("surname");
+      String userID = members.getString("id");
+      String userPhoneNumber = members.getString("phone_no");
+      String userEmail = members.getString("email");
+      Member newMember = new Member(userName, userSurname, userID, userPhoneNumber, userEmail);
+      extractedMembers.add(newMember);
     }
-    return extractedMembers; 
+    return extractedMembers;
   }
 }

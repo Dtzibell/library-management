@@ -17,12 +17,17 @@ public class FilterScene<T> {
   }
 
   public void start(Stage stage) throws Exception {
-    if (t instanceof Member) {
-      root = FXMLLoader.load(getClass().getResource("/view/memberFilterScreen.fxml"));
-    } else if (t instanceof Book) {
-      root = FXMLLoader.load(getClass().getResource("/view/bookFilterScreen.fxml"));
-    } else {
-      root = FXMLLoader.load(getClass().getResource("/view/errorScreen.fxml"));
+    switch (t) {
+      case Member m -> {
+        root = FXMLLoader.load(getClass().getResource("/view/memberFilterScreen.fxml"));
+      }
+      case Book b -> {
+        root = FXMLLoader.load(getClass().getResource("/view/bookFilterScreen.fxml"));
+      }
+      default -> {
+        root = FXMLLoader.load(getClass().getResource("/view/errorScreen.fxml"));
+        System.err.println("No valid root for new scene");
+      }
     }
     Scene scene = new Scene(root);
     stage.setScene(scene);

@@ -16,7 +16,7 @@ public interface Population {
   List<String> popularNames = new ArrayList<String>(Arrays.asList("John", "Peter", "Arnold", "June", "July", "August"));
   List<String> popularSurnames = new ArrayList<String>(Arrays.asList("Johnson", "Peterson", "Arnoldson", "Junedaughter", "Julydaughter", "Augustdaughter"));
 
-  public static void populateMembers(int limit, Connection conn) throws SQLException {
+  public static void populateMembers(int limit, Connection conn) throws SQLException, EmailVerificationException {
     Random rnd = new Random();
     for (int i = 0; i < limit; i++) {
       String randomName = popularNames.get(rnd.nextInt(6));
@@ -27,11 +27,7 @@ public interface Population {
       }
       String phoneNumber = sb.toString();
       String email;
-      try {
-        email = new Email(randomName.toLowerCase() + "." + randomSurname.toLowerCase() + "@mymail.xyz").get().get();
-      } catch (EmailVerificationException e) {
-        email = null;
-      }
+      email = new Email(randomName.toLowerCase() + "." + randomSurname.toLowerCase() + "@mymail.xyz").get().get();
       Member newMem = new Member(randomName, randomSurname, phoneNumber, email);
       String sql = "INSERT INTO members(name,surname,id,phone_no,email) VALUES (?,?,?::uuid,?,?)";
       PreparedStatement prep = conn.prepareStatement(sql); 

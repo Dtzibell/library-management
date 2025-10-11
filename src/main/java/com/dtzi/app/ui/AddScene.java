@@ -16,13 +16,17 @@ public class AddScene<T> {
   }
 
   public void start(Stage stage) throws Exception {
-    if (t instanceof Member) {
-      root = FXMLLoader.load(getClass().getResource("/view/addMemberScreen.fxml"));
-    } else if (t instanceof Book) {
-      root = FXMLLoader.load(getClass().getResource("/view/addBookScreen.fxml"));
-    } else {
-      root = FXMLLoader.load(getClass().getResource("/view/errorScreen.fxml"));
-      System.err.println("No valid root for new scene");
+    switch (t) {
+      case Member m -> {
+        root = FXMLLoader.load(getClass().getResource("/view/addMemberScreen.fxml"));
+      }
+      case Book b -> {
+        root = FXMLLoader.load(getClass().getResource("/view/addBookScreen.fxml"));
+      }
+      default -> {
+        root = FXMLLoader.load(getClass().getResource("/view/errorScreen.fxml"));
+        System.err.println("No valid root for new scene");
+      }
     }
     Scene scene = new Scene(root);
     stage.setScene(scene);

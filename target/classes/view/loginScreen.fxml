@@ -19,7 +19,7 @@
         <TextField fx:id="textPassword" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
         <HBox alignment="baseline_right" GridPane.columnIndex="1" GridPane.rowIndex="3">
           <children>
-            <Button text="Login" onAction="#login"/>
+            <Button text="Login" onAction="#login" defaultButton="true"/>
           </children>
         </HBox>
       </children>

@@ -2,26 +2,17 @@ package com.dtzi.app.classes;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 
-public class Book {
+public class Book implements DBObject {
   
   SimpleIntegerProperty publicationYear;
+  // TODO: make ISBN final. Cant have empty constructor though
   SimpleStringProperty title, author, ISBN;
-  SimpleBooleanProperty available;
+  // SimpleBooleanProperty available;
 
   public Book(){
   }
@@ -33,22 +24,9 @@ public class Book {
     this.ISBN = new SimpleStringProperty(ISBN);
   }
 
-  public Book(String title, String author, int publicationYear, String ISBN, Connection conn) {
-    this.title = new SimpleStringProperty(title);
-    this.author = new SimpleStringProperty(author);
-    this.publicationYear = new SimpleIntegerProperty(publicationYear);
-    this.ISBN = new SimpleStringProperty(ISBN);
-
-    try{
-      PreparedStatement prep = conn.prepareStatement("INSERT INTO books(title, author, pub_date, isbn) VALUES(?,?,?,?)");
-      prep.setString(1,title);
-      prep.setString(2,author);
-      prep.setInt(3,publicationYear);
-      prep.setString(4,ISBN);
-      System.out.println(prep.toString());
-    } catch (SQLException e) {
-      System.out.println(e.getMessage());
-    }
+  public Book(String title, String author, int publicationYear, String ISBN, Connection conn) throws SQLException {
+    this(title, author, publicationYear, ISBN);
+    createSQLRow(conn);
   }
 
   public SimpleStringProperty ISBNProperty() {
@@ -67,6 +45,22 @@ public class Book {
     return this.author;
   }
 
+  public String getTitle() {
+    return this.title.get();
+  }
+
+  public String getAuthor() {
+    return this.author.get();
+  }
+
+  public String getISBN() {
+    return this.ISBN.get();
+  }
+
+  public int getPubYear() {
+    return this.publicationYear.get();
+  }
+
   public void setISBN(String newISBN) {
     this.ISBN.set(newISBN);
   }
@@ -81,5 +75,28 @@ public class Book {
 
   public void setAuthor(String newAuthor) {
     this.title.set(newAuthor);
+  }
+  
+  public void createSQLRow(Connection conn) throws SQLException {
+    PreparedStatement prep = conn.prepareStatement("INSERT INTO books(title, author, pub_date, isbn) VALUES(?,?,?,?)");
+    prep.setString(1, this.getTitle());
+    prep.setString(2, this.getAuthor());
+    prep.setInt(3, this.getPubYear());
+    prep.setString(4, this.getISBN());
+    prep.executeUpdate();
+    System.out.println(prep.toString());
+  }
+
+  public void update(String newTitle, String newAuthor, int newPubYear, Connection conn) throws SQLException {
+      PreparedStatement prep = conn.prepareStatement("UPDATE books SET " +
+          "title = ?, author = ?, pub_date = ? WHERE isbn = ?");
+      prep.setString(1, newTitle);
+      prep.setString(2, newAuthor);
+      prep.setInt(3, newPubYear);
+      prep.setString(4, this.getISBN());
+      prep.executeUpdate();
+      this.setTitle(newTitle);
+      this.setAuthor(newAuthor);
+      this.setPubYear(newPubYear);
   }
 }

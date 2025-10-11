@@ -23,7 +23,7 @@
                   <VBox AnchorPane.topAnchor="20" AnchorPane.bottomAnchor="20"
                     AnchorPane.rightAnchor="20" AnchorPane.leftAnchor="20" spacing="10">
                     <children>
-                      <Button fx:id="memberFilterButton" defaultButton="true" text="Filter"
+                      <Button fx:id="memberFilterButton" text="Filter"
                         onAction="#filterMembers" />
                       <ListView fx:id="personList" prefHeight="1080" />
                     </children>
@@ -55,7 +55,7 @@
                         </GridPane>
                         <HBox spacing="10" alignment="baseline_right">
                           <children>
-                            <Button text="Update member" defaultButton="true"
+                            <Button text="Update member" 
                               onAction="#updateMember" />
                             <Button text="Remove member" onAction="#removeMember" />
                           </children>
@@ -86,7 +86,7 @@
                   <VBox AnchorPane.topAnchor="20" AnchorPane.bottomAnchor="20"
                     AnchorPane.rightAnchor="20" AnchorPane.leftAnchor="20" spacing="10">
                     <children>
-                      <Button fx:id="bookFilterButton" defaultButton="true" text="Filter"
+                      <Button fx:id="bookFilterButton" text="Filter"
                         onAction="#filterBooks" />
                       <ListView fx:id="bookList" prefHeight="1080" />
                     </children>
@@ -116,7 +116,7 @@
                         </GridPane>
                         <HBox spacing="10" alignment="baseline_right">
                           <children>
-                            <Button fx:id="bookUpdateButton" text="Update book" defaultButton="true" onAction="#updateBook" />
+                            <Button fx:id="bookUpdateButton" text="Update book" onAction="#updateBook" />
                             <Button text="Loan book" onAction="#loan" />
                             <Button text="Remove book" onAction="#removeBook" />
                           </children>

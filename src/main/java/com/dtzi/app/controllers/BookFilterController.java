@@ -34,10 +34,10 @@ public class BookFilterController implements Initializable {
           SELECT * FROM books WHERE LOWER(title) SIMILAR TO LOWER(?)
           AND LOWER(author) SIMILAR TO LOWER(?) AND pub_date::text SIMILAR TO LOWER(?)
           AND LOWER(ISBN) SIMILAR TO LOWER(?)""");
-      prep.setString(1, titleField.getText()+"%");
-      prep.setString(2, authorField.getText()+"%");
-      prep.setString(3, pubYearField.getText()+"%");
-      prep.setString(4, ISBNField.getText()+"%");
+      prep.setString(1, "%"+titleField.getText()+"%");
+      prep.setString(2, "%"+authorField.getText()+"%");
+      prep.setString(3, "%"+pubYearField.getText()+"%");
+      prep.setString(4, "%"+ISBNField.getText()+"%");
       MainController.listOfBooks.clear();
       MainController.listOfBooks.addAll(PostgreSQL.retrieveBooks(prep.toString(), conn));
       Stage currentStage = (Stage) titleField.getScene().getWindow();

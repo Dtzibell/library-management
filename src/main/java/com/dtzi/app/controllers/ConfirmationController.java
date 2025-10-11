@@ -1,6 +1,5 @@
 package com.dtzi.app.controllers;
 
-
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,7 +24,7 @@ public class ConfirmationController implements Initializable {
   private Label question;
   private Runnable runnable;
 
-  public void initialize (URL url, ResourceBundle rb) {
+  public void initialize(URL url, ResourceBundle rb) {
   }
 
   @FXML
@@ -40,7 +39,7 @@ public class ConfirmationController implements Initializable {
   public void setRunnable(Runnable func) {
     this.runnable = func;
   }
-  
+
   public void removeMember() {
     try {
       Connection conn = PostgreSQL.connect();
@@ -52,7 +51,7 @@ public class ConfirmationController implements Initializable {
       MainController.listOfMembers.remove(toDelete);
       closeWindow();
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      System.out.print(e.getMessage());
     }
   }
 
@@ -66,7 +65,7 @@ public class ConfirmationController implements Initializable {
       MainController.listOfBooks.remove(toDelete);
       closeWindow();
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      System.out.print(e.getMessage());
     }
   }
 

@@ -38,11 +38,11 @@ public class MemberFilterController implements Initializable {
           SELECT * FROM members WHERE LOWER(name) SIMILAR TO LOWER(?)
           AND LOWER(surname) SIMILAR TO LOWER(?) AND LOWER(id::TEXT) SIMILAR TO LOWER(?)
           AND LOWER(phone_no) SIMILAR TO LOWER(?) AND LOWER(email) SIMILAR TO LOWER(?)""");
-      prep.setString(1, nameField.getText()+"%");
-      prep.setString(2, surnameField.getText()+"%");
-      prep.setString(3, IDField.getText()+"%");
-      prep.setString(4, phoneNoField.getText()+"%");
-      prep.setString(5, emailField.getText()+"%");
+      prep.setString(1, "%"+nameField.getText()+"%");
+      prep.setString(2, "%"+surnameField.getText()+"%");
+      prep.setString(3, "%"+IDField.getText()+"%");
+      prep.setString(4, "%"+phoneNoField.getText()+"%");
+      prep.setString(5, "%"+emailField.getText()+"%");
       System.out.println(prep.toString());
       MainController.listOfMembers.clear();
       MainController.listOfMembers.addAll(PostgreSQL.retrieveMembers(prep.toString(), conn));

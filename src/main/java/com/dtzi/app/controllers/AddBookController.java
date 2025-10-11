@@ -39,7 +39,8 @@ public class AddBookController implements Initializable {
     });
   }
 
-  public void addBook() throws Exception {
+  @FXML 
+  private void addBook() throws Exception {
     Connection conn = PostgreSQL.connect();
     Book newBook = new Book(titleField.getText(), authorField.getText(), Integer.parseInt(pubDateField.getText()), ISBNField.getText(), conn);
     MainController.listOfBooks.add(newBook);

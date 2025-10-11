@@ -24,23 +24,19 @@ public class LoginController implements Initializable {
   TextField textUsername;
   @FXML
   TextField textPassword;
-  
+
   @Override
   public void initialize(URL url, ResourceBundle rb) {
   }
 
-  public void login() {
-    try {
-      ConnData.setURI(textIP.getText());
-      ConnData.setUser(textUsername.getText());
-      ConnData.setPass(textPassword.getText());
-      PostgreSQL.connect();
-      Stage stage = new Stage();
-      mainScene.start(stage);
-      Stage curStage = (Stage) textIP.getScene().getWindow();
-      curStage.close();
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
-    }
+  public void login() throws Exception {
+    ConnData.setURI(textIP.getText());
+    ConnData.setUser(textUsername.getText());
+    ConnData.setPass(textPassword.getText());
+    PostgreSQL.connect();
+    Stage stage = new Stage();
+    mainScene.start(stage);
+    Stage curStage = (Stage) textIP.getScene().getWindow();
+    curStage.close();
   }
 }
