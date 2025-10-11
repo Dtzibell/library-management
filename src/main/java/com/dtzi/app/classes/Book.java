@@ -74,7 +74,7 @@ public class Book implements DBObject {
   }
 
   public void setAuthor(String newAuthor) {
-    this.title.set(newAuthor);
+    this.author.set(newAuthor);
   }
   
   public void createSQLRow(Connection conn) throws SQLException {

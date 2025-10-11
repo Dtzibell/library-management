@@ -161,10 +161,10 @@ public class MainController implements Initializable {
 
       bookList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
         if (newValue != null) {
-          textAuthor.setText(newValue.authorProperty().get());
-          textTitle.setText(newValue.titleProperty().get());
-          textISBN.setText(newValue.ISBNProperty().get());
-          textPubYear.setText(Integer.toString(newValue.pubYearProperty().get()));
+          textAuthor.setText(newValue.getAuthor());
+          textTitle.setText(newValue.getTitle());
+          textISBN.setText(newValue.getISBN());
+          textPubYear.setText(Integer.toString(newValue.getPubYear()));
         }
       });
     } catch (Exception e) {
@@ -323,7 +323,7 @@ public class MainController implements Initializable {
       String newAuthor = textAuthor.getText();
       int newPubYear = Integer.parseInt(textPubYear.getText());
       toChange.update(newTitle, newAuthor, newPubYear, conn);
-      personList.refresh();
+      bookList.refresh();
     }
   }
 
