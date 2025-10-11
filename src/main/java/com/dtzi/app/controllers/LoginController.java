@@ -31,12 +31,9 @@ public class LoginController implements Initializable {
 
   public void login() {
     try {
-      // ConnData.setURI(textIP.getText());
-      // ConnData.setUser(textUsername.getText());
-      // ConnData.setPass(textPassword.getText());
-      ConnData.setURI("192.168.2.229");
-      ConnData.setUser("postgres");
-      ConnData.setPass("grespost");
+      ConnData.setURI(textIP.getText());
+      ConnData.setUser(textUsername.getText());
+      ConnData.setPass(textPassword.getText());
       PostgreSQL.connect();
       Stage stage = new Stage();
       mainScene.start(stage);

@@ -31,10 +31,10 @@
                 </AnchorPane>
                 <AnchorPane>
                   <children>
-                    <VBox spacing="10" AnchorPane.topAnchor="20" AnchorPane.bottomAnchor="20"
+                    <VBox fx:id = "memberForm" spacing="10" AnchorPane.topAnchor="20" AnchorPane.bottomAnchor="20"
                       AnchorPane.rightAnchor="20" AnchorPane.leftAnchor="20">
                       <children>
-                        <GridPane fx:id="memberGrid" hgap="5" vgap="5" alignment="baseline_left">
+                        <GridPane hgap="5" vgap="5" alignment="baseline_left">
                           <children>
                             <Label text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                             <TextField fx:id="textName" GridPane.columnIndex="1"
@@ -51,7 +51,6 @@
                             <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
                             <TextField fx:id="textEmail" GridPane.columnIndex="1"
                               GridPane.rowIndex="4" />
-                            <Label text="Loaned books:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
                           </children>
                         </GridPane>
                         <HBox spacing="10" alignment="baseline_right">
@@ -59,6 +58,11 @@
                             <Button text="Update member" defaultButton="true"
                               onAction="#updateMember" />
                             <Button text="Remove member" onAction="#removeMember" />
+                          </children>
+                        </HBox>
+                        <HBox>
+                          <children>
+                            <Label text="Loaned books:"/>
                           </children>
                         </HBox>
                       </children>

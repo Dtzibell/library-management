@@ -21,12 +21,19 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.fxml.Initializable;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.collections.FXCollections;
 import javafx.scene.control.ListCell;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -42,7 +49,8 @@ public class MainController implements Initializable{
   // ---------------------
   @FXML
   private ListView<Member> personList;
-  @FXML private GridPane memberGrid;
+  @FXML 
+  private VBox memberForm;
 
   @FXML
   private TextField textName;
@@ -88,6 +96,9 @@ public class MainController implements Initializable{
   private FilterScene<Book> bookFilterScene = new FilterScene<Book>(new Book());
   private AddScene<Book> bookAddScene = new AddScene<Book>(new Book());
   private ConfirmationScene confirmationScene = new ConfirmationScene();
+
+  private Clipboard clipboard = Clipboard.getSystemClipboard();
+  private ClipboardContent content = new ClipboardContent();
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
@@ -139,18 +150,33 @@ public class MainController implements Initializable{
           textID.setText(newValue.IDProperty().get());
           textPhoneNo.setText(newValue.phoneNumberProperty().get());
           textEmail.setText(newValue.emailProperty().get());
-          memberGrid.getChildren().removeIf(node -> {
-            Integer rowIndex = GridPane.getRowIndex(node);
-            return rowIndex != null && rowIndex >= 6;
-          });
+          ObservableList<Node> nodeList = memberForm.getChildren();
+          try {
+            nodeList.remove(3, nodeList.size());
+          } catch (IndexOutOfBoundsException e) {
+          }
           try {
             PreparedStatement prep = conn.prepareStatement("SELECT * FROM loans WHERE user_id = ?::uuid");
             prep.setString(1, textID.getText());
             ResultSet loans = prep.executeQuery();
-            int row = 6;
             while (loans.next()){
+              HBox LineBox = new HBox();
               Label bookLabel = new Label(loans.getString("isbn"));
-              memberGrid.add(bookLabel, 0, row++);
+              bookLabel.setOnMouseClicked(event -> {
+                content.putString(bookLabel.getText());
+                clipboard.setContent(content);
+              });
+              Button returnBook = new Button("Return");
+              returnBook.setOnAction((event) -> {
+                  try {
+                    returnBook(event);
+                  } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                  }
+              }
+                  );
+              LineBox.getChildren().addAll(bookLabel, returnBook);
+              memberForm.getChildren().add(LineBox);
             }
           } catch (Exception e){
             System.out.println(e.getMessage());
@@ -177,6 +203,24 @@ public class MainController implements Initializable{
         bookUpdateButton.setDisable(true);
     });
 
+  }
+
+  @FXML
+  private void returnBook(ActionEvent event) throws Exception {
+    Button button = (Button) event.getSource();
+    Connection conn = PostgreSQL.connect();
+    HBox parent = (HBox) button.getParent();
+    Label label = (Label) parent.getChildren().get(0);
+    String ISBN = label.getText();
+    PreparedStatement prep = conn.prepareStatement("""
+        BEGIN;
+        UPDATE books SET available = 'true' WHERE isbn = ?;
+        DELETE FROM loans WHERE isbn = ?;
+        COMMIT;
+        """);
+    prep.setString(1, ISBN);
+    prep.setString(2, ISBN);
+    prep.executeUpdate();
   }
 
   @FXML
@@ -244,11 +288,6 @@ public class MainController implements Initializable{
     prep.setString(4, book.ISBNProperty().get());
     prep.executeUpdate();
     System.out.println(prep.toString());
-  }
-
-  @FXML 
-  private void returnBook() throws Exception {
-    // a
   }
 
   @FXML
