@@ -6,7 +6,6 @@ import com.dtzi.app.pgutils.PostgreSQL;
 
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.ResourceBundle;
 import java.util.UUID;
 

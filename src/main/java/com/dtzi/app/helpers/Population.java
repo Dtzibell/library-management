@@ -33,7 +33,7 @@ public interface Population {
       PreparedStatement prep = conn.prepareStatement(sql); 
       prep.setString(1, randomName);
       prep.setString(2, randomSurname);
-      prep.setString(3, newMem.IDProperty().get());
+      prep.setString(3, newMem.getID());
       prep.setString(4, phoneNumber);
       prep.setString(5, email);
       prep.execute();

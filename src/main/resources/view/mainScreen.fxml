@@ -13,25 +13,27 @@
 <AnchorPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
   fx:controller="com.dtzi.app.MainController">
   <children>
-    <SplitPane AnchorPane.topAnchor="20" AnchorPane.bottomAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.leftAnchor="20" dividerPositions="0.4" prefWidth="1920">
+    <SplitPane AnchorPane.topAnchor="20" AnchorPane.bottomAnchor="20" AnchorPane.rightAnchor="20"
+      AnchorPane.leftAnchor="20" dividerPositions="0.4" >
       <items>
-        <VBox spacing="10">
+        <VBox >
           <children>
             <SplitPane dividerPositions="0.4">
               <items>
                 <AnchorPane>
                   <VBox AnchorPane.topAnchor="20" AnchorPane.bottomAnchor="20"
-                    AnchorPane.rightAnchor="20" AnchorPane.leftAnchor="20" spacing="10">
+                    AnchorPane.rightAnchor="20" AnchorPane.leftAnchor="20" spacing="5">
                     <children>
                       <Button fx:id="memberFilterButton" text="Filter"
                         onAction="#filterMembers" />
-                      <ListView fx:id="personList" prefHeight="1080" />
+                      <ListView fx:id="personList" />
                     </children>
                   </VBox>
                 </AnchorPane>
                 <AnchorPane>
                   <children>
-                    <VBox fx:id = "memberForm" spacing="10" AnchorPane.topAnchor="20" AnchorPane.bottomAnchor="20"
+                    <VBox fx:id="memberForm" spacing="10" AnchorPane.topAnchor="20"
+                      AnchorPane.bottomAnchor="20"
                       AnchorPane.rightAnchor="20" AnchorPane.leftAnchor="20">
                       <children>
                         <GridPane hgap="5" vgap="5" alignment="baseline_left">
@@ -55,14 +57,14 @@
                         </GridPane>
                         <HBox spacing="10" alignment="baseline_right">
                           <children>
-                            <Button text="Update member" 
+                            <Button text="Update member"
                               onAction="#updateMember" />
                             <Button text="Remove member" onAction="#removeMember" />
                           </children>
                         </HBox>
                         <HBox>
                           <children>
-                            <Label text="Loaned books:"/>
+                            <Label text="Loaned books:" />
                           </children>
                         </HBox>
                       </children>
@@ -71,11 +73,17 @@
                 </AnchorPane>
               </items>
             </SplitPane>
-            <HBox alignment="baseline_right">
+            <AnchorPane>
               <children>
-                <Button text="Add member" onAction="#addMember" />
+                <HBox alignment="baseline_right" AnchorPane.topAnchor="10"
+                  AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10"
+                  AnchorPane.rightAnchor="10">
+                  <children>
+                    <Button text="Add member" onAction="#addMember" />
+                  </children>
+                </HBox>
               </children>
-            </HBox>
+            </AnchorPane>
           </children>
         </VBox>
         <VBox spacing="10">
@@ -88,20 +96,20 @@
                     <children>
                       <Button fx:id="bookFilterButton" text="Filter"
                         onAction="#filterBooks" />
-                      <ListView fx:id="bookList" prefHeight="1080" />
+                      <ListView fx:id="bookList" />
                     </children>
                   </VBox>
                 </AnchorPane>
                 <AnchorPane>
                   <children>
                     <VBox spacing="10" AnchorPane.topAnchor="20" AnchorPane.bottomAnchor="20"
-                      AnchorPane.rightAnchor="20" AnchorPane.leftAnchor="20" prefWidth="600">
+                      AnchorPane.rightAnchor="20" AnchorPane.leftAnchor="20" >
                       <children>
                         <GridPane hgap="5" vgap="5" alignment="baseline_center">
                           <children>
                             <Label text="Title:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                             <TextArea fx:id="textTitle" GridPane.columnIndex="1"
-                              GridPane.rowIndex="0" wrapText="true"/>
+                              GridPane.rowIndex="0" wrapText="true" maxHeight="200" />
                             <Label text="Author:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                             <TextField fx:id="textAuthor" GridPane.columnIndex="1"
                               GridPane.rowIndex="1" />
@@ -116,7 +124,8 @@
                         </GridPane>
                         <HBox spacing="10" alignment="baseline_right">
                           <children>
-                            <Button fx:id="bookUpdateButton" text="Update book" onAction="#updateBook" />
+                            <Button fx:id="bookUpdateButton" text="Update book"
+                              onAction="#updateBook" />
                             <Button text="Loan book" onAction="#loan" />
                             <Button text="Remove book" onAction="#removeBook" />
                           </children>
@@ -127,11 +136,17 @@
                 </AnchorPane>
               </items>
             </SplitPane>
-            <HBox alignment="baseline_right">
+            <AnchorPane>
               <children>
-                <Button text="Add book" onAction="#addBook" />
+                <HBox alignment="baseline_right" AnchorPane.topAnchor="10"
+                  AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10"
+                  AnchorPane.rightAnchor="10">
+                  <children>
+                    <Button text="Add book" onAction="#addBook" />
+                  </children>
+                </HBox>
               </children>
-            </HBox>
+            </AnchorPane>
           </children>
         </VBox>
       </items>

@@ -4,11 +4,6 @@ import com.dtzi.app.classes.Book;
 import com.dtzi.app.classes.Member;
 import com.dtzi.app.classes.Member.Email.EmailVerificationException;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
